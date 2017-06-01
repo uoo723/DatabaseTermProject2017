@@ -1,0 +1,18 @@
+# Built application files
+build/
+
+# Gradle genereated files
+.gradle/
+
+# User-speicifi configurations
+.idea/
+*.iml
+
+# OS-specific files
+.DS_Store
+.DS_Sotre?
+._*
+.Spotlight-V100
+.Trashes
+ehtumbs.db
+Thumbs.db

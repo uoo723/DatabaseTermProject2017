@@ -1,0 +1,13 @@
+group 'com.sangwoo.possystem'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile project(':RxSwing')
+}
+
+mainClassName = 'com.sangwoo.possystem.Main'
