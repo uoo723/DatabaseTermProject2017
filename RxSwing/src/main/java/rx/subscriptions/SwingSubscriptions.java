@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Netflix, Inc.
- * 
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,12 +15,13 @@
  */
 package rx.subscriptions;
 
-import javax.swing.SwingUtilities;
-
-import rx.Scheduler.Worker;
-import rx.Subscription;
-import rx.functions.Action0;
+import io.reactivex.Scheduler;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
+import io.reactivex.functions.Action;
 import rx.schedulers.SwingScheduler;
+
+import javax.swing.*;
 
 public final class SwingSubscriptions {
 
@@ -33,27 +34,24 @@ public final class SwingSubscriptions {
      * the Swing thread.
      *
      * Create an Subscription that always runs <code>unsubscribe</code> in the event dispatch thread.
-     * 
+     *
      * @param unsubscribe
      * @return an Subscription that always runs <code>unsubscribe</code> in the event dispatch thread.
      */
     @Deprecated
-    public static Subscription unsubscribeInEventDispatchThread(final Action0 unsubscribe) {
-        return Subscriptions.create(new Action0() {
-            @Override
-            public void call() {
-                if (SwingUtilities.isEventDispatchThread()) {
-                    unsubscribe.call();
-                } else {
-                    final Worker inner = SwingScheduler.getInstance().createWorker();
-                    inner.schedule(new Action0() {
-                        @Override
-                        public void call() {
-                            unsubscribe.call();
-                            inner.unsubscribe();
-                        }
-                    });
-                }
+    public static Disposable unsubscribeInEventDispatchThread(final Action unsubscribe) {
+        return Disposables.fromAction(() -> {
+            if (SwingUtilities.isEventDispatchThread()) {
+                unsubscribe.run();
+            } else {
+                final Scheduler.Worker inner = SwingScheduler.getInstance().createWorker();
+                inner.schedule(() -> {
+                    try {
+                        unsubscribe.run();
+                        inner.dispose();
+                    } catch (Exception ignored) {
+                    }
+                });
             }
         });
     }

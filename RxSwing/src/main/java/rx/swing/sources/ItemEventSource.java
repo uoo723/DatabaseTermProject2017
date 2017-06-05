@@ -15,12 +15,10 @@
  */
 package rx.swing.sources;
 
-import rx.Observable;
-import rx.Observable.OnSubscribe;
-import rx.Subscriber;
-import rx.functions.Action0;
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.disposables.Disposables;
 import rx.schedulers.SwingScheduler;
-import rx.subscriptions.Subscriptions;
 
 import java.awt.*;
 import java.awt.event.ItemEvent;
@@ -29,24 +27,12 @@ import java.awt.event.ItemListener;
 public enum ItemEventSource { ; // no instances
 
     public static Observable<ItemEvent> fromItemEventsOf(final ItemSelectable itemSelectable) {
-        return Observable.create(new OnSubscribe<ItemEvent>() {
-            @Override
-            public void call(final Subscriber<? super ItemEvent> subscriber) {
-                final ItemListener listener = new ItemListener() {
-                    @Override
-                    public void itemStateChanged( ItemEvent event ) {
-                        subscriber.onNext(event);
-                    }
-                };
-                itemSelectable.addItemListener(listener);
-                subscriber.add(Subscriptions.create(new Action0() {
-                    @Override
-                    public void call() {
-                        itemSelectable.removeItemListener(listener);
-                    }
-                }));
-            }
-        }).subscribeOn(SwingScheduler.getInstance())
+        return Observable.<ItemEvent>create(e -> {
+            final ItemListener listener = e::onNext;
+            itemSelectable.addItemListener(listener);
+            e.setDisposable(Disposables.fromAction(() -> itemSelectable.removeItemListener(listener)));
+        })
+                .subscribeOn(SwingScheduler.getInstance())
                 .unsubscribeOn(SwingScheduler.getInstance());
     }
 }
