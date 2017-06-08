@@ -1,2 +1,2 @@
 rootProject.name = 'possystem'
-include 'RxSwing', 'app'
+include 'RxSwing', 'app', 'rxjava2-jdbc'
