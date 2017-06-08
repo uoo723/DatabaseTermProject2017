@@ -2,6 +2,7 @@ package com.sangwoo.possystem.data.database;
 
 import com.sangwoo.possystem.common.utils.ScriptRunner;
 import com.sangwoo.possystem.domain.database.DatabaseProxy;
+import com.sangwoo.possystem.domain.model.Table;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +16,8 @@ import java.io.Reader;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseProxyImpl implements DatabaseProxy {
     private static final Logger logger = LogManager.getLogger();
@@ -34,6 +37,12 @@ public class DatabaseProxyImpl implements DatabaseProxy {
             logger.info("dbInit");
 
             URL resource = DatabaseProxyImpl.class.getClassLoader().getResource("create.sql");
+
+            if (database == null) {
+                logger.warn("login first");
+                throw new Exception("Login first");
+            }
+
             Connection conn = database.connections().blockingFirst();
             ScriptRunner runner = new ScriptRunner(conn);
 
@@ -41,6 +50,12 @@ public class DatabaseProxyImpl implements DatabaseProxy {
 
             runner.setSendFullScript(true);
             runner.runScript(reader);
+
+            long count = database.select("select * from \"TABLE\"").count().blockingGet();
+            logger.debug("count: " + count);
+            if (count == 0) {
+                insertTables();
+            }
         });
     }
 
@@ -61,5 +76,16 @@ public class DatabaseProxyImpl implements DatabaseProxy {
         });
 
         database = Database.from(f, () -> {});
+    }
+
+    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
+    private void insertTables() {
+        logger.debug("insertTables");
+        for (int i = 1; i <= 20; i++) {
+            database.update("insert into \"TABLE\"(table_num) values(?)")
+                    .parameters(i)
+                    .complete()
+                    .blockingGet();
+        }
     }
 }
