@@ -2,7 +2,6 @@ package com.sangwoo.possystem.data.database;
 
 import com.sangwoo.possystem.common.utils.ScriptRunner;
 import com.sangwoo.possystem.domain.database.DatabaseProxy;
-import com.sangwoo.possystem.domain.model.Table;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import org.apache.logging.log4j.LogManager;
@@ -16,8 +15,6 @@ import java.io.Reader;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DatabaseProxyImpl implements DatabaseProxy {
     private static final Logger logger = LogManager.getLogger();
@@ -63,12 +60,11 @@ public class DatabaseProxyImpl implements DatabaseProxy {
         });
     }
 
-    @SuppressWarnings("AccessStaticViaInstance")
     @Override
     public Completable login(String host, String user, String password) {
-        this.host = host;
-        this.user = user;
-        this.password = password;
+        DatabaseProxyImpl.host = host;
+        DatabaseProxyImpl.user = user;
+        DatabaseProxyImpl.password = password;
 
         createDatabase(host, user, password);
         return database.select("select 1 from dual").count().toCompletable();

@@ -1,6 +1,8 @@
 package com.sangwoo.possystem.ui.main;
 
 import com.sangwoo.possystem.domain.usecase.InquiryCustomer;
+import com.sangwoo.possystem.domain.usecase.InquiryEmployee;
+import com.sangwoo.possystem.domain.usecase.LoadData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,8 +14,14 @@ public class MainPresenter implements MainContract.Presenter {
 
     private MainContract.View view;
 
+    private final InquiryEmployee inquiryEmployeeUseCase;
+    private final LoadData loadDataUseCase;
+
     @Inject
-    MainPresenter(InquiryCustomer customer) {}
+    MainPresenter(InquiryEmployee inquiryEmployee, LoadData loadData) {
+        inquiryEmployeeUseCase = inquiryEmployee;
+        loadDataUseCase = loadData;
+    }
 
     @Override
     public void bindView(MainContract.View view) {
@@ -22,6 +30,9 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void loadData(File file) {
+        loadDataUseCase.execute(file, o -> {},
+                Throwable::printStackTrace,
+                () -> logger.info("success"));
     }
 
     @Override

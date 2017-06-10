@@ -13,6 +13,7 @@ import io.reactivex.Observable;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +36,8 @@ public class LoadData extends UseCase<File, Object> {
     }
 
     private void loadData(File file) throws Exception {
-        Scanner sc = new Scanner(file);
+        Scanner sc = new Scanner(new FileInputStream(file), "UTF-8");
+
         int count = sc.nextInt();
 
         for (int i = 0; i < count; i++) {
