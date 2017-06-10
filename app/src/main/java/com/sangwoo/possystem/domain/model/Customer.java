@@ -79,6 +79,22 @@ public final class Customer {
         public String getValue() {
             return value;
         }
+
+        public static Level parse(String levelStr) {
+            Level level;
+
+            if (Level.GOLD.getValue().equals(levelStr)) {
+                level = Level.GOLD;
+            } else if (Level.SILVER.getValue().equals(levelStr)) {
+                level = Level.SILVER;
+            } else if (Level.BRONZE.getValue().equals(levelStr)) {
+                level = Level.BRONZE;
+            } else {
+                level = Level.NORMAL;
+            }
+
+            return level;
+        }
     }
 
     @Override

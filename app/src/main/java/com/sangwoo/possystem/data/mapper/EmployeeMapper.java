@@ -9,20 +9,8 @@ public class EmployeeMapper {
         int id = dEmployee.id().intValue();
         String name = dEmployee.name();
         String employeeId = dEmployee.employeeId();
-        Employee.Rank rank = parseRank(dEmployee.rank());
+        Employee.Rank rank = Employee.Rank.parse(dEmployee.rank());
 
         return new Employee(id, name, employeeId, rank);
-    }
-
-    private static Employee.Rank parseRank(String rankStr) {
-        Employee.Rank rank;
-
-        if (Employee.Rank.SUPERVISOR.getValue().equals(rankStr)) {
-            rank = Employee.Rank.SUPERVISOR;
-        } else {
-            rank = Employee.Rank.STAFF;
-        }
-
-        return rank;
     }
 }

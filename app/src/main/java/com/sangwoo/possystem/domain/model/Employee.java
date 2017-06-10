@@ -57,6 +57,18 @@ public final class Employee {
         public String getValue() {
             return value;
         }
+
+        public static Rank parse(String rankStr) {
+            Rank rank;
+
+            if (Rank.SUPERVISOR.getValue().equals(rankStr)) {
+                rank = Rank.SUPERVISOR;
+            } else {
+                rank = Rank.STAFF;
+            }
+
+            return rank;
+        }
     }
 
     @Override
