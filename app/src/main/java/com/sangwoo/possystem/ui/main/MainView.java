@@ -62,17 +62,18 @@ public class MainView extends BaseFrame implements MainContract.View {
 
     @Override
     public void succeedLoadingData() {
-
+        Toast.makeToast(this, "  데이터 불러오기 성공  ");
     }
 
     @Override
     public void failedLoadingData() {
-
+        Toast.makeToast(this, "  데이터 불러오기 실패  ");
     }
 
     @Override
     public void succeedEmployeeLogin() {
-
+        Toast.makeToast(this, "  로그인 성공  ");
+        loginPrompt.dispose();
     }
 
     @Override
@@ -100,5 +101,6 @@ public class MainView extends BaseFrame implements MainContract.View {
 
     private void openLoginPrompt() {
         loginPrompt.setVisible(true);
+        loginPrompt.setOnLoginListener(presenter::employeeLogin);
     }
 }

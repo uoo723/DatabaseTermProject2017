@@ -1,8 +1,8 @@
 package com.sangwoo.possystem.ui.main;
 
-import com.sangwoo.possystem.domain.usecase.InquiryCustomer;
 import com.sangwoo.possystem.domain.usecase.InquiryEmployee;
 import com.sangwoo.possystem.domain.usecase.LoadData;
+import com.sangwoo.possystem.ui.EmployeeLoginSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,14 +31,25 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void loadData(File file) {
         loadDataUseCase.execute(file, o -> {},
-                Throwable::printStackTrace,
-                () -> logger.info("success"));
+                throwable -> {
+//                    throwable.printStackTrace();
+                    view.failedLoadingData();
+                },
+                view::succeedLoadingData);
     }
 
     @Override
     public void employeeLogin(String name, String employeeId) {
-        // TODO: 2017. 6. 8. Impl employeeLogin()
-        logger.info(String.format("name: %s, id: %s", name, employeeId));
-        view.failedEmployeeLogin();
+        inquiryEmployeeUseCase.execute(name, employee -> {
+            if (employee.getEmployeeId().equals(employeeId)) {
+                view.succeedEmployeeLogin();
+                EmployeeLoginSession.login(employee);
+            } else {
+                view.failedEmployeeLogin();
+            }
+        }, throwable -> {
+//            throwable.printStackTrace();
+            view.failedEmployeeLogin();
+        });
     }
 }
