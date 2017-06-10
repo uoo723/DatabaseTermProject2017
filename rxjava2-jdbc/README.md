@@ -29,7 +29,7 @@ Use this maven dependency:
   <version>0.1-SNAPSHOT</version>
 </dependency>
 ```
-If you want to use the built-in test database then add the Apache Derby dependency (otherwise you'll need the jdbc dependency for the database you want to connect to):
+If you want to use the built-in test databaseProxy then add the Apache Derby dependency (otherwise you'll need the jdbc dependency for the databaseProxy you want to connect to):
 
 ```xml
 <dependency>
@@ -41,7 +41,7 @@ If you want to use the built-in test database then add the Apache Derby dependen
 
 Database
 -------------
-To start things off you need a `Database` instance. Given the jdbc url of your database you can create a `Database` object like this:
+To start things off you need a `Database` instance. Given the jdbc url of your databaseProxy you can create a `Database` object like this:
 
 ```java
 Database db = Database.from(url, maxPoolSize);
@@ -49,17 +49,17 @@ Database db = Database.from(url, maxPoolSize);
 
 ### Support for playing with rxjava2-jdbc!
 
-If you want to have a play with a built-in test database then do this:
+If you want to have a play with a built-in test databaseProxy then do this:
 
 ```java
 Database db = Database.test(maxPoolSize);
 ```
 
-The test database has a couple of tables `Person` and `Address` with three rows in `Person` and two rows in `Address`:
+The test databaseProxy has a couple of tables `Person` and `Address` with three rows in `Person` and two rows in `Address`:
 
 <img src="src/docs/tables.png?raw=true"/>
 
-Each time you call `Database.test(maxPoolSize)` you will have a fresh new database to play with that is loaded with data as described above.
+Each time you call `Database.test(maxPoolSize)` you will have a fresh new databaseProxy to play with that is loaded with data as described above.
 
 A query example
 ---------------
@@ -295,7 +295,7 @@ Non-blocking connection pools
 -------------------------------
 A new exciting feature of *rxjava2-jdbc* is the availability of non-blocking connection pools. 
 
-In normal non-reactive database programming a couple of different threads (started by servlet calls for instance) will *race* for the next available connection from a pool of database connections. If no unused connection remains in the pool then the standard non-reactive approach is to **block the thread** until a connection becomes available. 
+In normal non-reactive databaseProxy programming a couple of different threads (started by servlet calls for instance) will *race* for the next available connection from a pool of databaseProxy connections. If no unused connection remains in the pool then the standard non-reactive approach is to **block the thread** until a connection becomes available.
 
 Blocking a thread is a resource issue as each blocked thread holds onto ~0.5MB of stack and may incur context switch and memory-access delays (adds latency to thread processing) when being switched to. For example 100 blocked threads hold onto ~50MB of memory (outside of java heap).
 
@@ -307,7 +307,7 @@ The simplest way of creating a `Database` instance with a non-blocking connectio
 Database db = Database.from(url, maxPoolSize);
 ```
 
-If you want to play with the in-memory built-in test database (requires Apache Derby dependency) then:
+If you want to play with the in-memory built-in test databaseProxy (requires Apache Derby dependency) then:
 
 ```java
 Database db = Database.test(maxPoolSize);
@@ -331,7 +331,7 @@ NonBlockingConnectionPool pool = Pools
 Database db = Database.from(pool);
 ```
 
-Note that the health check sql varies from database to database. Here are some examples:
+Note that the health check sql varies from databaseProxy to databaseProxy. Here are some examples:
 
 * Oracle - `select 1 from dual`
 * Sql Server - `select 1`
@@ -340,11 +340,11 @@ Note that the health check sql varies from database to database. Here are some e
 
 ### Demonstration
 
-Lets create a database with a non-blocking connection pool of size 1 only and demonstrate what happens when two queries run concurrently. We use the in-built test database for this one 
+Lets create a databaseProxy with a non-blocking connection pool of size 1 only and demonstrate what happens when two queries run concurrently. We use the in-built test databaseProxy for this one
 so you can copy and paste this code to your ide and it will run (in a main method or unit test say):
 
 ```java
- create database with non-blocking connection pool 
+ create databaseProxy with non-blocking connection pool
  of size 1
 Database db = Database.test(1); 
 
@@ -503,7 +503,7 @@ Transactions
 -----------------
 Transactions are a critical feature of relational databases. 
 
-When we're talking RxJava we need to consider the behaviour of individual JDBC objects when called by different threads, possibly concurrently. The approach taken by *rxjava2-jdbc* outside of a transaction safely uses Connection pools (in a non-blocking way). Inside a transaction we must make all calls to the database using the same Connection object so the behaviour of that Connection when called from different threads is important. Some JDBC drivers provide thread-safety on JDBC objects by synchronizing every call.
+When we're talking RxJava we need to consider the behaviour of individual JDBC objects when called by different threads, possibly concurrently. The approach taken by *rxjava2-jdbc* outside of a transaction safely uses Connection pools (in a non-blocking way). Inside a transaction we must make all calls to the databaseProxy using the same Connection object so the behaviour of that Connection when called from different threads is important. Some JDBC drivers provide thread-safety on JDBC objects by synchronizing every call.
 
 The safest approach with transactions is to perform all db interaction synchronously. Asynchronous processing within transactions was problematic in *rxjava-jdbc* because `ThreadLocal` was used to hold the Connection. Asynchronous processing with transactions *is* possible with *rxjava2-jdbc* but should be handled with care given that your JDBC driver may block or indeed suffer from race conditions that most users don't encounter.
 
@@ -530,7 +530,7 @@ Note that the commit/rollback of the transaction happens automatically.
 
 What we see above is that each emission from the select statement is wrapped with a Tx object including the terminal event (error or complete). This is so you can for instance perform an action using the same transaction. 
 
-Let's see another example that uses the `Tx` object to update the database. We are going to do something a bit laborious that would normally be done in one update statement (`update person set score = -1`) just to demonstrate usage:
+Let's see another example that uses the `Tx` object to update the databaseProxy. We are going to do something a bit laborious that would normally be done in one update statement (`update person set score = -1`) just to demonstrate usage:
 
 ```java
 Database.test()

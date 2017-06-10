@@ -22,9 +22,8 @@ public class CancelOrder extends UseCase<Order, Object> {
     @Override
     Observable<Object> buildUseCaseObservable(Order order) {
         Table table = order.getTable();
-        table.setPaymentCompleted(true);
+        table.setOrdering(true);
 
-        return Observable.merge(dataSource.deleteOrder(table.getId()).toObservable(),
-                dataSource.updateTable(table).toObservable());
+        return Observable.merge(dataSource.deleteOrder(table.getId()).toObservable());
     }
 }

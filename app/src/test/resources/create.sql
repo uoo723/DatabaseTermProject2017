@@ -2,7 +2,7 @@ DECLARE
   id_seq VARCHAR2(255) := 'create sequence id_seq';
   t_customer VARCHAR2(500) := 'create table customer(' ||
                      'id int primary key,' ||
-                     'name varchar2(255) not null,' ||
+                     'name varchar2(255) unique not null,' ||
                      'birth_date varchar2(255) not null,' ||
                      'phone_num varchar2(255) not null,' ||
                      '"LEVEL" varchar2(255) not null check ("LEVEL" in (''Gold'', ''Silver'', ''Bronze'', ''Normal'')),' ||
@@ -17,10 +17,9 @@ DECLARE
                                     'end;';
   t_employee VARCHAR2(500) := 'create table employee(' ||
                               'id int primary key,' ||
-                              'name varchar2(255) not null,' ||
-                              'employee_id varchar2(255) not null,' ||
-                              'rank varchar2(255) not null check (rank in (''Supervisor'', ''Staff'')),' ||
-                              'total_result int not null)';
+                              'name varchar2(255) unique not null,' ||
+                              'employee_id varchar2(255) unique not null,' ||
+                              'rank varchar2(255) not null check (rank in (''Supervisor'', ''Staff'')))';
   employee_trigger VARCHAR2(255) := 'create trigger employee_trigger ' ||
                                     'before insert on employee ' ||
                                     'for each row ' ||
@@ -31,7 +30,7 @@ DECLARE
                                     'end;';
   t_menu VARCHAR2(500) := 'create table menu(' ||
                           'id int primary key,' ||
-                          'name varchar2(255) not null,' ||
+                          'name varchar2(255) unique not null,' ||
                           'price int not null)';
   menu_trigger VARCHAR2(255) := 'create trigger menu_trigger ' ||
                                 'before insert on menu ' ||
@@ -43,8 +42,7 @@ DECLARE
                                 'end;';
   t_table VARCHAR2(500) := 'create table "TABLE"(' ||
                            'id int primary key, ' ||
-                           'table_num int not null,' ||
-                           'payment_completed number(1) default 0 not null)';
+                           'table_num int unique not null)';
   table_trigger VARCHAR2(255) := 'create trigger table_trigger ' ||
                                  'before insert on "TABLE" ' ||
                                  'for each row ' ||
@@ -70,10 +68,15 @@ DECLARE
   t_payment VARCHAR2(500) := 'create table payment(' ||
                              'id int primary key,' ||
                              '"DATE" date default sysdate not null,' ||
-                             'order_id int not null,' ||
+                             'menu_id int not null,' ||
+                             'table_id int not null,' ||
                              'payer_id int not null,' ||
-                             'constraint payment_order_fk foreign key (order_id) references "ORDER" (id),' ||
-                             'constraint payment_payer_fk foreign key (payer_id) references customer (id))';
+                             'employee_id int not null,' ||
+                             'pay int not null,' ||
+                             'constraint payment_menu_fk foreign key (menu_id) references menu (id),' ||
+                             'constraint payment_table_fk foreign key (table_id) references "TABLE" (id),' ||
+                             'constraint payment_payer_fk foreign key (payer_id) references customer (id),' ||
+                             'constraint payment_employee_fk foreign key (employee_id) references employee (id))';
   payment_trigger VARCHAR2(255) := 'create trigger payment_trigger ' ||
                                    'before insert on payment ' ||
                                    'for each row ' ||

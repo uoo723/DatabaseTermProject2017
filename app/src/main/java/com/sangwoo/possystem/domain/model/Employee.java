@@ -5,14 +5,12 @@ public final class Employee {
     private String name;
     private String employeeId;
     private Rank rank;
-    private int totalResult;
 
-    public Employee(int id, String name, String employeeId, Rank rank, int totalResult) {
+    public Employee(int id, String name, String employeeId, Rank rank) {
         this.id = id;
         this.name = name;
         this.employeeId = employeeId;
         this.rank = rank;
-        this.totalResult = totalResult;
     }
 
     public int getId() {
@@ -47,14 +45,6 @@ public final class Employee {
         this.rank = rank;
     }
 
-    public int getTotalResult() {
-        return totalResult;
-    }
-
-    public void setTotalResult(int totalResult) {
-        this.totalResult = totalResult;
-    }
-
     public enum Rank {
         SUPERVISOR("Supervisor"), STAFF("Staff");
 
@@ -67,5 +57,10 @@ public final class Employee {
         public String getValue() {
             return value;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "id: " + id + ", name: " + name + ", employeeId: " + employeeId + ", rank: " + rank;
     }
 }

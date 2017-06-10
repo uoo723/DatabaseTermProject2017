@@ -3,26 +3,18 @@ package com.sangwoo.possystem.domain.model;
 import java.util.Date;
 
 public class Sales {
-    private int id;
     private Date date;
     private Menu mostSoldMenu;
     private Menu leastSoldMenu;
+    private int todaySales;
     private int accumulatedSales;
 
-    public Sales(int id, Date date, Menu mostSoldMenu, Menu leastSoldMenu, int accumulatedSales) {
-        this.id = id;
+    public Sales(Date date, Menu mostSoldMenu, Menu leastSoldMenu, int todaySales, int accumulatedSales) {
         this.date = date;
         this.mostSoldMenu = mostSoldMenu;
         this.leastSoldMenu = leastSoldMenu;
+        this.todaySales = todaySales;
         this.accumulatedSales = accumulatedSales;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Date getDate() {
@@ -49,11 +41,25 @@ public class Sales {
         this.leastSoldMenu = leastSoldMenu;
     }
 
+    public int getTodaySales() {
+        return todaySales;
+    }
+
+    public void setTodaySales(int todaySales) {
+        this.todaySales = todaySales;
+    }
+
     public int getAccumulatedSales() {
         return accumulatedSales;
     }
 
     public void setAccumulatedSales(int accumulatedSales) {
         this.accumulatedSales = accumulatedSales;
+    }
+
+    @Override
+    public String toString() {
+        return "date: " + date + "mostSoldMenu: " + mostSoldMenu + ", leastSoldMenu: " + leastSoldMenu +
+                ", todaySales: " + todaySales + ", accumulatedSales: " + accumulatedSales;
     }
 }

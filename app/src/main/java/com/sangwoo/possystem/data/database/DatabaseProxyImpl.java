@@ -28,7 +28,7 @@ public class DatabaseProxyImpl implements DatabaseProxy {
     private Database database;
 
     @Inject
-    DatabaseProxyImpl() {}
+    public DatabaseProxyImpl() {}
 
     @SuppressWarnings("ConstantConditions")
     @Override

@@ -20,6 +20,6 @@ public class RequestOrder extends UseCase<Order, Object> {
 
     @Override
     Observable<Object> buildUseCaseObservable(Order order) {
-        return dataSource.createOrder(order).toObservable();
+        return dataSource.updateOrder(order).toObservable();
     }
 }

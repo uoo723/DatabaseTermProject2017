@@ -34,4 +34,9 @@ public final class Menu {
     public void setPrice(int price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "id: " + id + ", name: " + name + ", price: " + price;
+    }
 }

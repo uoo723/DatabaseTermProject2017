@@ -80,4 +80,10 @@ public final class Customer {
             return value;
         }
     }
+
+    @Override
+    public String toString() {
+        return "id: " + id + ", name: " + name + ", birthDate: " + birthDate + ", phoneNum: " + phoneNum + ", level: " +
+                level + ", purchaseAmount: " + purchaseAmount;
+    }
 }

@@ -3,12 +3,12 @@ package com.sangwoo.possystem.domain.model;
 public final class Table {
     private int id;
     private int tableNum;
-    private boolean paymentCompleted;
+    private boolean ordering;
 
     public Table(int id, int tableNum, boolean paymentCompleted) {
         this.id = id;
         this.tableNum = tableNum;
-        this.paymentCompleted = paymentCompleted;
+        this.ordering = paymentCompleted;
     }
 
     public int getId() {
@@ -27,11 +27,16 @@ public final class Table {
         this.tableNum = tableNum;
     }
 
-    public boolean isPaymentCompleted() {
-        return paymentCompleted;
+    public boolean isOrdering() {
+        return ordering;
     }
 
-    public void setPaymentCompleted(boolean paymentCompleted) {
-        this.paymentCompleted = paymentCompleted;
+    public void setOrdering(boolean ordering) {
+        this.ordering = ordering;
+    }
+
+    @Override
+    public String toString() {
+        return "id: " + id + ", tableNum: " + tableNum + ", ordering: " + ordering;
     }
 }

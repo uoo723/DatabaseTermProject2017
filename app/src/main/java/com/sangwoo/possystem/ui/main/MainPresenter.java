@@ -1,5 +1,6 @@
 package com.sangwoo.possystem.ui.main;
 
+import com.sangwoo.possystem.domain.usecase.InquiryCustomer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,7 +13,7 @@ public class MainPresenter implements MainContract.Presenter {
     private MainContract.View view;
 
     @Inject
-    MainPresenter() {}
+    MainPresenter(InquiryCustomer customer) {}
 
     @Override
     public void bindView(MainContract.View view) {
@@ -21,7 +22,6 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void loadData(File file) {
-        
     }
 
     @Override

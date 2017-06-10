@@ -22,8 +22,8 @@ public class RequestPayment extends UseCase<Payment, Object> {
     @Override
     Observable<Object> buildUseCaseObservable(Payment payment) {
         Table table = payment.getOrder().getTable();
-        table.setPaymentCompleted(true);
+        table.setOrdering(true);
         return Observable.merge(dataSource.createPayment(payment).toObservable(),
-                dataSource.updateTable(table).toObservable());
+                dataSource.deleteOrder(payment.getOrder().getTable().getId()).toObservable());
     }
 }
