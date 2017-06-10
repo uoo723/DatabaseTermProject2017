@@ -27,6 +27,10 @@ public class DatabaseProxyImpl implements DatabaseProxy {
 
     private Database database;
 
+    private static String host;
+    private static String user;
+    private static String password;
+
     @Inject
     public DatabaseProxyImpl() {}
 
@@ -59,13 +63,20 @@ public class DatabaseProxyImpl implements DatabaseProxy {
         });
     }
 
+    @SuppressWarnings("AccessStaticViaInstance")
     @Override
     public Completable login(String host, String user, String password) {
+        this.host = host;
+        this.user = user;
+        this.password = password;
+
         createDatabase(host, user, password);
         return database.select("select 1 from dual").count().toCompletable();
     }
 
     public Database getDatabase() {
+        if (database == null)
+            createDatabase(host, user, password);
         return database;
     }
 
