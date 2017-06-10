@@ -4,16 +4,25 @@ import com.sangwoo.possystem.App;
 import com.sangwoo.possystem.common.utils.SwingUtils;
 import com.sangwoo.possystem.common.widgets.Toast;
 import com.sangwoo.possystem.ui.BaseFrame;
+import com.sangwoo.possystem.ui.main.admin.AdminView;
+import com.sangwoo.possystem.ui.main.menu.MenuView;
+import com.sangwoo.possystem.ui.main.order.OrderView;
+import com.sangwoo.possystem.ui.main.table.TableView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.io.File;
 
 public class MainView extends BaseFrame implements MainContract.View {
 
     private static final Logger logger = LogManager.getLogger();
+    private static final int WIDTH = 500;
+    private static final int HEIGHT = 700;
 
     @Inject
     MainContract.Presenter presenter;
@@ -22,6 +31,10 @@ public class MainView extends BaseFrame implements MainContract.View {
     private JMenu menu;
     private JMenuItem openMenuItem;
     private JMenuItem loginMenuItem;
+
+    private JPanel mainContainer;
+
+    private JLabel titleLabel;
 
     private JFileChooser fileChooser;
 
@@ -43,20 +56,14 @@ public class MainView extends BaseFrame implements MainContract.View {
         fileChooser = new JFileChooser();
         loginPrompt = new LoginPrompt();
 
-        menuBar = new JMenuBar();
-        menu = new JMenu("Menu");
-        openMenuItem = new JMenuItem("Open");
-        loginMenuItem = new JMenuItem("Log in");
+        setSize(WIDTH, HEIGHT);
+        setLayout(new BorderLayout());
 
-        menu.add(openMenuItem);
-        menu.add(loginMenuItem);
-        menuBar.add(menu);
-
-        setJMenuBar(menuBar);
+        setMenu();
+        setMainContainer();
 
         initButtonListener();
 
-        setSize(100, 100);
         SwingUtils.ceneterWindow(this);
     }
 
@@ -102,5 +109,64 @@ public class MainView extends BaseFrame implements MainContract.View {
     private void openLoginPrompt() {
         loginPrompt.setVisible(true);
         loginPrompt.setOnLoginListener(presenter::employeeLogin);
+    }
+
+    private void setMenu() {
+        menuBar = new JMenuBar();
+        menu = new JMenu("Menu");
+        openMenuItem = new JMenuItem("Open");
+        loginMenuItem = new JMenuItem("Log in");
+
+        menu.add(openMenuItem);
+        menu.add(loginMenuItem);
+        menuBar.add(menu);
+
+        setJMenuBar(menuBar);
+    }
+
+    private void setMainContainer() {
+        JPanel dummyPanel1 = new TableView();
+        JPanel dummyPanel2 = new OrderView();
+        JPanel dummyPanel3 = new MenuView();
+        JPanel dummyPanel4 = new AdminView();
+
+        mainContainer = new JPanel();
+        mainContainer.setLayout(new GridBagLayout());
+        mainContainer.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        GridBagConstraints c = new GridBagConstraints();
+        c.weightx = 1;
+        c.weighty = 1;
+        c.fill = GridBagConstraints.BOTH;
+
+        titleLabel = new JLabel("식당 주문관리", SwingConstants.CENTER);
+        titleLabel.setFont(new Font(titleLabel.getFont().getName(), Font.PLAIN, 40));
+        Border padding = BorderFactory.createEmptyBorder(5, 5, 5, 5);
+        Border lineBorder = BorderFactory.createLineBorder(Color.black);
+        titleLabel.setBorder(BorderFactory.createCompoundBorder(padding, lineBorder));
+
+        add(titleLabel, BorderLayout.NORTH);
+        add(mainContainer, BorderLayout.CENTER);
+        
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weighty = 0.4;
+        c.insets = new Insets(10, 0, 0, 5);
+        mainContainer.add(dummyPanel1, c);
+
+        c.gridx = 1;
+        c.gridy = 0;
+        c.insets = new Insets(10, 5, 0, 0);
+        mainContainer.add(dummyPanel2, c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        c.weighty = 0.6;
+        c.insets = new Insets(10, 0, 0, 5);
+        mainContainer.add(dummyPanel3, c);
+
+        c.gridx = 1;
+        c.gridy = 1;
+        c.insets = new Insets(10, 5, 0, 0);
+        mainContainer.add(dummyPanel4, c);
     }
 }
