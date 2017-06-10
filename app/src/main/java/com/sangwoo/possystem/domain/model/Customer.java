@@ -89,8 +89,10 @@ public final class Customer {
                 level = Level.SILVER;
             } else if (Level.BRONZE.getValue().equals(levelStr)) {
                 level = Level.BRONZE;
-            } else {
+            } else if (Level.NORMAL.getValue().equals(levelStr)) {
                 level = Level.NORMAL;
+            } else {
+                throw new IllegalArgumentException("Cannot convert to Level");
             }
 
             return level;

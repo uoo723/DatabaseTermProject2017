@@ -63,8 +63,10 @@ public final class Employee {
 
             if (Rank.SUPERVISOR.getValue().equals(rankStr)) {
                 rank = Rank.SUPERVISOR;
-            } else {
+            } else if (Rank.STAFF.getValue().equals(rankStr)){
                 rank = Rank.STAFF;
+            } else {
+                throw new IllegalArgumentException("Cannot convert to Rank");
             }
 
             return rank;
