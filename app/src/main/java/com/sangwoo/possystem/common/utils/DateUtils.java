@@ -12,6 +12,11 @@ public final class DateUtils {
         return transFormat.format(date);
     }
 
+    public static Date convertToBirthDate(String dateStr) throws Exception {
+        DateFormat transFormat = new SimpleDateFormat("MMdd");
+        return transFormat.parse(dateStr);
+    }
+
     public static String convertToString(Date date) {
         DateFormat transFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
         return transFormat.format(date);
