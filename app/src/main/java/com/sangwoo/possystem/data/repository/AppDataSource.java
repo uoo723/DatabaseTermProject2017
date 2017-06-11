@@ -237,12 +237,27 @@ public class AppDataSource implements DataSource {
 
     @Override
     public Single<Employee> getEmployee(String name) {
-        return databaseProxy.getDatabase()
-                .select("select * from employee where name=?")
-                .parameters(name)
-                .autoMap(DEmployee.class)
-                .map(EmployeeMapper::toEmployee)
-                .singleOrError();
+        return Single.fromCallable(() -> {
+            Employee employee = databaseProxy.getDatabase()
+                    .select("select * from employee where name=?")
+                    .parameters(name)
+                    .autoMap(DEmployee.class)
+                    .map(EmployeeMapper::toEmployee)
+                    .blockingFirst();
+
+            try {
+                BigDecimal record = databaseProxy.getDatabase()
+                        .select("select sum(pay) from PAYMENT where EMPLOYEE_ID = ?")
+                        .parameters(employee.getId())
+                        .getAs(BigDecimal.class)
+                        .blockingFirst();
+
+                employee.setRecord(record.intValue());
+            } catch (NullPointerException ignored) {}
+
+            return employee;
+        });
+
     }
 
     @Override
