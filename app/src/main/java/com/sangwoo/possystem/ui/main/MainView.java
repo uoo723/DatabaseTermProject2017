@@ -178,5 +178,6 @@ public class MainView extends BaseFrame implements MainContract.View {
         mainContainer.add(adminView, c);
 
         menuView.setOnMenuClickListener(orderView::addMenu);
+        orderView.setOnTableStateChangedListener(tableView::setOrder);
     }
 }

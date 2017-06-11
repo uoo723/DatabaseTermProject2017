@@ -16,4 +16,8 @@ public final class EmployeeLoginSession {
     public static Employee getEmployee() {
         return employee;
     }
+
+    public static boolean isLogin() {
+        return employee != null;
+    }
 }

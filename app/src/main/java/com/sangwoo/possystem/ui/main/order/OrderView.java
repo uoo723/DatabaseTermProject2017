@@ -3,6 +3,7 @@ package com.sangwoo.possystem.ui.main.order;
 import com.sangwoo.possystem.App;
 import com.sangwoo.possystem.common.widgets.Toast;
 import com.sangwoo.possystem.domain.model.Menu;
+import com.sangwoo.possystem.domain.model.Table;
 import com.sangwoo.possystem.ui.BasePanel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +12,8 @@ import javax.inject.Inject;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class OrderView extends BasePanel implements OrderContract.View {
@@ -21,7 +24,7 @@ public class OrderView extends BasePanel implements OrderContract.View {
 
     private static final Logger logger = LogManager.getLogger();
 
-    private OnTableStateChangedListener onTableStateChangedListener;
+    private OnTableStateChangedListener listener;
 
     private JLabel titleLabel;
     private JPanel contentPanel;
@@ -32,7 +35,7 @@ public class OrderView extends BasePanel implements OrderContract.View {
     private JTextField customerTextField;
     private JComboBox<String> tableComboBox;
     private JButton orderButton;
-    private JButton cancelBUtton;
+    private JButton cancelButton;
     private JButton payButton;
     private JScrollPane scrollPane;
 
@@ -61,9 +64,13 @@ public class OrderView extends BasePanel implements OrderContract.View {
 
         initContent();
         initButtonListener();
+        tableComboBox.setSelectedIndex(0);
+        presenter.loadOrderInfo(1);
 
         add(titleLabel, BorderLayout.NORTH);
         add(contentPanel, BorderLayout.CENTER);
+
+        presenter.loadTablesInfo();
     }
 
     @Override
@@ -79,7 +86,18 @@ public class OrderView extends BasePanel implements OrderContract.View {
     public void setTitle(String title) { /* Do nothing */ }
 
     @Override
-    public void succeedOrder() {
+    public void showTableState(List<Table> tables) {
+        tables.forEach(table -> {
+            if (listener != null)
+                listener.onChanged(table.getTableNum(), table.isOrdering());
+        });
+    }
+
+    @Override
+    public void succeedOrder(int tableNum) {
+        if (listener != null)
+            listener.onChanged(tableNum, true);
+
         Toast.makeToast(getParentJFrame(), "  주문 성공  ");
     }
 
@@ -89,8 +107,12 @@ public class OrderView extends BasePanel implements OrderContract.View {
     }
 
     @Override
-    public void succeedCancel() {
+    public void succeedCancel(int tableNum) {
+        if (listener != null)
+            listener.onChanged(tableNum, false);
+
         Toast.makeToast(getParentJFrame(), "  주문 취소  ");
+        orderTextArea.setText("");
     }
 
     @Override
@@ -99,9 +121,12 @@ public class OrderView extends BasePanel implements OrderContract.View {
     }
 
     @Override
-    public void succeedPay() {
+    public void succeedPay(int tableNum) {
+        if (listener != null)
+            listener.onChanged(tableNum, false);
         Toast.makeToast(getParentJFrame(), "  결제 성공  ");
-        // TODO: 2017. 6. 11. reset view
+        customerTextField.setText("");
+        orderTextArea.setText("");
     }
 
     @Override
@@ -112,8 +137,22 @@ public class OrderView extends BasePanel implements OrderContract.View {
             Toast.makeToast(getParentJFrame(), message);
     }
 
+    @Override
+    public void cancelOrder(int tableNum, String message) {
+        if (listener != null) {
+            listener.onChanged(tableNum, false);
+        }
+
+        Toast.makeToast(getParentJFrame(), message);
+    }
+
+    @Override
+    public void failedAddMenu() {
+        Toast.makeToast(getParentJFrame(), "  메뉴 변경 실패  ");
+    }
+
     public void setOnTableStateChangedListener(OnTableStateChangedListener listener) {
-        onTableStateChangedListener = listener;
+        this.listener = listener;
     }
 
     @Override
@@ -121,9 +160,19 @@ public class OrderView extends BasePanel implements OrderContract.View {
         orderTextArea.setText(menuList);
     }
 
+    @Override
+    public void emptyMenu() {
+        Toast.makeToast(getParentJFrame(), "  메뉴가 선택되지 않았습니다  ");
+    }
+
     public void addMenu(Menu menu) {
         logger.info("menu: " + menu);
         presenter.addMenu(menu);
+    }
+
+    @Override
+    public void requiredEmployeeLogin() {
+        Toast.makeToast(getParentJFrame(), "  직원 로그인을 해주세요  ");
     }
 
     private void initContent() {
@@ -137,7 +186,7 @@ public class OrderView extends BasePanel implements OrderContract.View {
         customerTextField = new JTextField();
         tableComboBox = new JComboBox<>(TABLE_NUMS);
         orderButton = new JButton("주문");
-        cancelBUtton = new JButton("취소");
+        cancelButton = new JButton("취소");
         payButton = new JButton("결제");
 
         GridBagConstraints c = new GridBagConstraints();
@@ -178,13 +227,22 @@ public class OrderView extends BasePanel implements OrderContract.View {
         contentPanel.add(orderButton, c);
 
         c.gridy = 5;
-        contentPanel.add(cancelBUtton, c);
+        contentPanel.add(cancelButton, c);
 
         c.gridy = 6;
         contentPanel.add(payButton, c);
     }
 
     private void initButtonListener() {
-        // TODO: 2017. 6. 11. Impl initButtonListener
+        tableComboBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String tableNumStr = (String) e.getItem();
+                presenter.loadOrderInfo(Integer.parseInt(tableNumStr));
+            }
+        });
+
+        orderButton.addActionListener(e -> presenter.order());
+        cancelButton.addActionListener(e -> presenter.cancel());
+        payButton.addActionListener(e -> presenter.pay(customerTextField.getText()));
     }
 }

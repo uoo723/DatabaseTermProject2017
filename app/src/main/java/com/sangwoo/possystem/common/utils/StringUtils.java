@@ -11,4 +11,8 @@ public final class StringUtils {
             randomString += random.nextInt(10);
         return randomString;
     }
+
+    public static boolean isEmpty(String str) {
+        return str == null || "".equals(str.trim());
+    }
 }
