@@ -23,7 +23,13 @@ public class RequestPayment extends UseCase<Payment, Object> {
     Observable<Object> buildUseCaseObservable(Payment payment) {
         Table table = payment.getOrder().getTable();
         table.setOrdering(true);
-        return Observable.merge(dataSource.createPayment(payment).toObservable(),
-                dataSource.deleteOrder(payment.getOrder().getTable().getId()).toObservable());
+
+        if (payment.getPayer() == null)
+            return Observable.merge(dataSource.createPayment(payment).toObservable(),
+                    dataSource.deleteOrder(payment.getOrder().getTable().getId()).toObservable());
+        else
+            return Observable.merge(dataSource.createPayment(payment).toObservable(),
+                    dataSource.deleteOrder(payment.getOrder().getTable().getId()).toObservable(),
+                    dataSource.updateCustomer(payment.getPayer()).toObservable());
     }
 }

@@ -208,6 +208,22 @@ public class AppDataSource implements DataSource {
     }
 
     @Override
+    public Completable updateCustomer(Customer customer) {
+        int id = customer.getId();
+        String name = customer.getName();
+        String birthDate = DateUtils.convertToBirthString(customer.getBirthDate());
+        String phoneNum = customer.getPhoneNum();
+        String level = customer.getLevel().getValue();
+        int purchaseAmount = customer.getPurchaseAmount();
+
+        return databaseProxy.getDatabase()
+                .update("update customer set name=?, birth_date=?, phone_num=?, \"LEVEL\"=?, purchase_amount=? " +
+                        "where id=?")
+                .parameters(name, birthDate, phoneNum, level, purchaseAmount, id)
+                .complete();
+    }
+
+    @Override
     public Completable createEmployee(Employee employee) {
         String name = employee.getName();
         String employeeId = employee.getEmployeeId();

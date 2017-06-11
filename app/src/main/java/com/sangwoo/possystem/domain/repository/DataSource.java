@@ -24,6 +24,7 @@ public interface DataSource {
 
     Completable createCustomer(Customer customer);
     Single<Customer> getCustomer(String name);
+    Completable updateCustomer(Customer customer);
 
     Completable createEmployee(Employee employee);
     Single<Employee> getEmployee(String name);

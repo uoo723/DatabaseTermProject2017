@@ -14,6 +14,7 @@ public final class Payment {
         this.payer = payer;
         this.employee = employee;
         this.pays = calculatePay();
+        setPurchaseAmount();
     }
 
     public Order getOrder() {
@@ -72,5 +73,10 @@ public final class Payment {
         }
 
         return pays;
+    }
+
+    private void setPurchaseAmount() {
+        if (payer != null)
+            payer.setPurchaseAmount(payer.getPurchaseAmount() + pays.stream().reduce(0, (a, b) -> a + b));
     }
 }
