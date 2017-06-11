@@ -15,7 +15,7 @@ public interface OrderContract {
         void failedCancel();
         void succeedPay(int tableNum);
         void failedPay(String message);
-        void showMenuList(String menuList);
+        void showMenuList(List<Menu> menuList);
         void emptyMenu();
         void showTableState(List<Table> tables);
         void cancelOrder(int tableNum, String message);

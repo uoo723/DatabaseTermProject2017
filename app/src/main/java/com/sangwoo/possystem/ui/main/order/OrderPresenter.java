@@ -139,7 +139,7 @@ public class OrderPresenter implements OrderContract.Presenter {
             this.order = order;
             menuList = order.getMenus();
 
-            view.showMenuList(getMenuList());
+            view.showMenuList(menuList);
         });
     }
 
@@ -159,25 +159,11 @@ public class OrderPresenter implements OrderContract.Presenter {
                     () -> {
                         order.getTable().setOrdering(false);
                         view.cancelOrder(order.getTable().getTableNum(), "  메뉴 변경으로 주문이 취소되었습니다  ");
-                        view.showMenuList(getMenuList());
+                        view.showMenuList(menuList);
                     });
         } else {
-            view.showMenuList(getMenuList());
+            view.showMenuList(menuList);
         }
-    }
-
-    private String getMenuList() {
-        final StringBuilder sb = new StringBuilder();
-        final AtomicInteger total = new AtomicInteger(0);
-        menuList.forEach(menu -> {
-            sb.append(String.format("%s\t%d\n", menu.getName(), menu.getPrice()));
-            total.addAndGet(menu.getPrice());
-        });
-
-        sb.append("\n\n\n");
-        sb.append("---------------------\n");
-        sb.append(String.format("총합계\t%d", total.get()));
-        return sb.toString();
     }
 
     private void internalPay(Payment payment) {

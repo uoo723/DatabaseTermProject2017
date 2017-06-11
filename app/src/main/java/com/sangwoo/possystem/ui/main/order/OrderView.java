@@ -14,6 +14,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 public class OrderView extends BasePanel implements OrderContract.View {
@@ -156,8 +157,8 @@ public class OrderView extends BasePanel implements OrderContract.View {
     }
 
     @Override
-    public void showMenuList(String menuList) {
-        orderTextArea.setText(menuList);
+    public void showMenuList(List<Menu> menuList) {
+        orderTextArea.setText(getMenuListInfo(menuList));
     }
 
     @Override
@@ -244,5 +245,19 @@ public class OrderView extends BasePanel implements OrderContract.View {
         orderButton.addActionListener(e -> presenter.order());
         cancelButton.addActionListener(e -> presenter.cancel());
         payButton.addActionListener(e -> presenter.pay(customerTextField.getText()));
+    }
+
+    private String getMenuListInfo(List<Menu> menuList) {
+        final StringBuilder sb = new StringBuilder();
+        final AtomicInteger total = new AtomicInteger(0);
+        menuList.forEach(menu -> {
+            sb.append(String.format("%s\t%d\n", menu.getName(), menu.getPrice()));
+            total.addAndGet(menu.getPrice());
+        });
+
+        sb.append("\n\n\n");
+        sb.append("---------------------\n");
+        sb.append(String.format("총합계\t%d", total.get()));
+        return sb.toString();
     }
 }
