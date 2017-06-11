@@ -163,15 +163,14 @@ public class AppDataSource implements DataSource {
 
             if (payment.getPayer() != null) {
                 completable = databaseProxy.getDatabase()
-                        .update("insert into payment(menu_id, table_id, payer_id, employee_id, pay) values(?, ?, ?, " +
-                                "?, ?)")
+                        .update(sql)
                         .parameters(menus.get(i).getId(), payment.getOrder().getTable().getId(),
                                 payment.getPayer().getId(),
                                 payment.getEmployee().getId(), payment.getPays().get(i))
                         .complete();
             } else {
                 completable = databaseProxy.getDatabase()
-                        .update("insert into payment(menu_id, table_id, payer_id, employee_id, pay) values(?, ?, ?, ?)")
+                        .update(sql)
                         .parameters(menus.get(i).getId(), payment.getOrder().getTable().getId(),
                                 payment.getEmployee().getId(), payment.getPays().get(i))
                         .complete();
