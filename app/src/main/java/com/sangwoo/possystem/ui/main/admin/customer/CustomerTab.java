@@ -27,6 +27,8 @@ public class CustomerTab extends BasePanel {
         viewArea = new JTextArea();
         scrollPane = new JScrollPane(viewArea);
 
+        viewArea.setEditable(false);
+
         c.gridx = 0;
         c.gridy = 0;
         c.weightx = 0;
