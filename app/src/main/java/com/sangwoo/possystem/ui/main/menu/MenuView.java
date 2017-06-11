@@ -19,6 +19,10 @@ import java.util.stream.IntStream;
 
 public class MenuView extends BasePanel implements MenuViewContract.View {
 
+    public interface OnMenuClickListener {
+        void onMenuClick(Menu menu);
+    }
+
     private static final Logger logger = LogManager.getLogger();
 
     private JLabel titleLabel;
@@ -27,6 +31,8 @@ public class MenuView extends BasePanel implements MenuViewContract.View {
 
     @Inject
     MenuViewContract.Presenter presenter;
+
+    private OnMenuClickListener listener;
 
     @Override
     public void initView() {
@@ -79,6 +85,10 @@ public class MenuView extends BasePanel implements MenuViewContract.View {
         Toast.makeToast(getParentJFrame(), "  메뉴 로딩 실패  ");
     }
 
+    public void setOnMenuClickListener(OnMenuClickListener listener) {
+        this.listener = listener;
+    }
+
     private void initContent() {
         menuButtons = new ArrayList<>(20);
         final GridBagConstraints c = new GridBagConstraints();
@@ -104,7 +114,11 @@ public class MenuView extends BasePanel implements MenuViewContract.View {
     private void initButtonListener(List<Menu> menuList) {
         int min = Math.max(menuList.size(), menuButtons.size());
 
-//        IntStream.range(0, min).forEach(i ->
-//                menuButtons.get(i).addActionListener(e -> presenter.clickMenu(i)));
+        IntStream.range(0, min).forEach(i ->
+                menuButtons.get(i).addActionListener(e -> {
+                    if (listener != null) {
+                        listener.onMenuClick(menuList.get(i));
+                    }
+                }));
     }
 }
