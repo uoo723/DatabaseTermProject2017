@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import javax.inject.Inject;
 import java.io.File;
 
-// TODO: 2017. 6. 11. Impl init table state
 public class MainPresenter implements MainContract.Presenter {
     private static final Logger logger = LogManager.getLogger();
 
@@ -46,7 +45,7 @@ public class MainPresenter implements MainContract.Presenter {
     public void employeeLogin(String name, String employeeId) {
         inquiryEmployeeUseCase.clear();
 
-        inquiryEmployeeUseCase.execute(name, employee -> {
+        inquiryEmployeeUseCase.execute(name.trim(), employee -> {
             if (employee.getEmployeeId().equals(employeeId)) {
                 view.succeedEmployeeLogin();
                 EmployeeLoginSession.login(employee);
