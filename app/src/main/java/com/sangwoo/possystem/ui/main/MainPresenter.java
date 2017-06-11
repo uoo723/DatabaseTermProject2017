@@ -44,6 +44,8 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void employeeLogin(String name, String employeeId) {
+        inquiryEmployeeUseCase.clear();
+
         inquiryEmployeeUseCase.execute(name, employee -> {
             if (employee.getEmployeeId().equals(employeeId)) {
                 view.succeedEmployeeLogin();
