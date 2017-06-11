@@ -110,6 +110,12 @@ public final class Customer {
                 return 0;
             }
         }
+
+
+        @Override
+        public String toString() {
+            return getValue();
+        }
     }
 
     @Override

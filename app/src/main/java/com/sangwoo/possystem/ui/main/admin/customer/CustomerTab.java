@@ -1,13 +1,18 @@
 package com.sangwoo.possystem.ui.main.admin.customer;
 
+import com.sangwoo.possystem.App;
+import com.sangwoo.possystem.common.utils.DateUtils;
+import com.sangwoo.possystem.common.widgets.Toast;
+import com.sangwoo.possystem.domain.model.Customer;
 import com.sangwoo.possystem.ui.BasePanel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.inject.Inject;
 import javax.swing.*;
 import java.awt.*;
 
-public class CustomerTab extends BasePanel {
+public class CustomerTab extends BasePanel implements CustomerTabContract.View {
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -19,8 +24,12 @@ public class CustomerTab extends BasePanel {
     private JTextArea viewArea;
     private CustomerRegisterPrompt prompt;
 
+    @Inject
+    CustomerTabContract.Presenter presenter;
+
     @Override
     public void initView() {
+        presenter.bindView(this);
 
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -71,17 +80,63 @@ public class CustomerTab extends BasePanel {
 
     @Override
     public void inject() {
-
+        DaggerCustomerTabComponent.builder()
+                .appComponent(App.getAppComponent())
+                .customerTabPresenterModule(new CustomerTabPresenterModule())
+                .build()
+                .inject(this);
     }
 
     @Override
     public void setTitle(String title) { /* Do nothing */ }
 
+    @Override
+    public void requiredEmployeeLogin() {
+        Toast.makeToast(getParentJFrame(), "  직원 로그인을 해주세요  ");
+    }
+
+    @Override
+    public void showCustomerInfo(final Customer customer) {
+        viewArea.setText(getCustomerInfoString(customer));
+    }
+
+    @Override
+    public void failedInquiry(String message) {
+        if (message == null)
+            Toast.makeToast(getParentJFrame(), "  조회 실패  ");
+        else
+            Toast.makeToast(getParentJFrame(), message);
+    }
+
+    @Override
+    public void succeedRegistration() {
+        Toast.makeToast(getParentJFrame(), "  등록 성공  ");
+        prompt.hidePrompt();
+    }
+
+    @Override
+    public void failedRegistration(String message) {
+        if (message == null)
+            Toast.makeToast(getParentJFrame(), "  가입 실패  ");
+        else
+            Toast.makeToast(getParentJFrame(), message);
+    }
+
     private void initButtonListener() {
         joinButton.addActionListener(e -> prompt.showPrompt());
-        prompt.setOnRegisterListener((name, birth, phoneNum) -> {
-            // TODO: 2017. 6. 11. Impl CustomerRegisterPrompt#setOnRegisterListener
-            logger.info("name: " + name + ", birth: " + birth + ", phone: " + phoneNum);
-        });
+        inquiryButton.addActionListener(e -> presenter.inquiryCustomer(customerTextField.getText()));
+        prompt.setOnRegisterListener(presenter::registerCustomer);
+    }
+
+    private String getCustomerInfoString(final Customer customer) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("고객명:%s\n", customer.getName()));
+        sb.append(String.format("고객 ID:%04d\n", customer.getId()));
+        sb.append(String.format("생일:%s\n", DateUtils.convertToBirthString(customer.getBirthDate())));
+        sb.append(String.format("전화번호:%s\n", customer.getPhoneNum()));
+        sb.append(String.format("고객등급:%s\n", customer.getLevel()));
+        sb.append(String.format("총 구매금액:%s원\n", customer.getPurchaseAmount()));
+
+        return sb.toString();
     }
 }

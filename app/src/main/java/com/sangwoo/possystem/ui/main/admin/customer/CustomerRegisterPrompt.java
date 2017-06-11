@@ -1,6 +1,7 @@
 package com.sangwoo.possystem.ui.main.admin.customer;
 
 import com.sangwoo.possystem.common.utils.SwingUtils;
+import com.sangwoo.possystem.domain.model.Customer;
 import com.sangwoo.possystem.ui.Prompt;
 
 import javax.swing.*;
@@ -8,7 +9,7 @@ import java.awt.*;
 
 public class CustomerRegisterPrompt extends JFrame implements Prompt {
     public interface OnRegisterListener {
-        void onRegister(String name, String birth, String phoneNum);
+        void onRegister(String name, String birth, String phoneNum, Customer.Level level);
     }
 
     private OnRegisterListener listener;
@@ -16,13 +17,16 @@ public class CustomerRegisterPrompt extends JFrame implements Prompt {
     private JLabel nameLabel;
     private JLabel birthLabel;
     private JLabel phoneLabel;
+    private JLabel levelLabel;
 
     private JTextField nameTextField;
     private JTextField birthTextField;
     private JTextField phoneTextField;
 
-    private JButton regiserButton;
+    private JButton registerButton;
     private JButton cancelButton;
+
+    private JComboBox<Customer.Level> levelJComboBox;
 
     public CustomerRegisterPrompt() {
         super();
@@ -34,6 +38,7 @@ public class CustomerRegisterPrompt extends JFrame implements Prompt {
         nameTextField.setText("");
         birthTextField.setText("");
         phoneTextField.setText("");
+        levelJComboBox.setSelectedIndex(0);
         setVisible(true);
     }
 
@@ -55,13 +60,19 @@ public class CustomerRegisterPrompt extends JFrame implements Prompt {
         nameLabel = new JLabel("고객명");
         birthLabel = new JLabel("생일(4자리)");
         phoneLabel = new JLabel("연락처");
+        levelLabel = new JLabel("등급");
 
         nameTextField = new JTextField();
         birthTextField = new JTextField();
         phoneTextField = new JTextField();
 
-        regiserButton = new JButton("가입신청");
+        registerButton = new JButton("가입신청");
         cancelButton = new JButton("취소");
+
+        Customer.Level[] levels = {Customer.Level.GOLD, Customer.Level.SILVER, Customer.Level.BRONZE,
+                Customer.Level.NORMAL};
+
+        levelJComboBox = new JComboBox<>(levels);
 
         c.gridx = 0;
         c.gridy = 0;
@@ -72,6 +83,9 @@ public class CustomerRegisterPrompt extends JFrame implements Prompt {
 
         c.gridy = 2;
         add(phoneLabel, c);
+
+        c.gridy = 3;
+        add(levelLabel, c);
 
         c.gridx = 1;
         c.gridy = 0;
@@ -84,9 +98,12 @@ public class CustomerRegisterPrompt extends JFrame implements Prompt {
         c.gridy = 2;
         add(phoneTextField, c);
 
-        c.gridx = 0;
         c.gridy = 3;
-        add(regiserButton, c);
+        add(levelJComboBox, c);
+
+        c.gridx = 0;
+        c.gridy = 4;
+        add(registerButton, c);
 
         c.gridx = 1;
         add(cancelButton, c);
@@ -98,10 +115,10 @@ public class CustomerRegisterPrompt extends JFrame implements Prompt {
     }
 
     private void initButtonListener() {
-        regiserButton.addActionListener(e -> {
+        registerButton.addActionListener(e -> {
             if (listener != null)
                 listener.onRegister(nameTextField.getText(), birthTextField.getText(),
-                        phoneTextField.getText());
+                        phoneTextField.getText(), (Customer.Level) levelJComboBox.getSelectedItem());
         });
 
         cancelButton.addActionListener(e -> hidePrompt());

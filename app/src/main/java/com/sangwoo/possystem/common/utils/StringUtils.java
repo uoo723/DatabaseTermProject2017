@@ -15,4 +15,16 @@ public final class StringUtils {
     public static boolean isEmpty(String str) {
         return str == null || "".equals(str.trim());
     }
+
+    public static boolean isDigits(String str) {
+        if (isEmpty(str))
+            return false;
+
+        for (char c : str.toCharArray()) {
+            if (!Character.isDigit(c))
+                return false;
+        }
+
+        return true;
+    }
 }
