@@ -55,13 +55,13 @@ public class MenuView extends BasePanel {
         c.gridy = 0;
         c.anchor = GridBagConstraints.NORTH;
         IntStream.range(0, 20).forEach(i -> {
-//            logger.info("c.girdx: " + c.gridx + ", c.gridy: " + c.gridy);
             if (i == 10) {
                 c.gridx++;
                 c.gridy = 0;
             }
 
             JButton button = new JButton((i + 1) + "");
+            button.setPreferredSize(new Dimension(50, 30));
             menuButtons.add(button);
             contentPanel.add(button, c);
             c.gridy++;
