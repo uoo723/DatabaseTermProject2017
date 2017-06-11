@@ -11,6 +11,10 @@ public final class Table {
         this.ordering = paymentCompleted;
     }
 
+    public Table(int tableNum, boolean ordering) {
+        this(-1, tableNum, ordering);
+    }
+
     public int getId() {
         return id;
     }

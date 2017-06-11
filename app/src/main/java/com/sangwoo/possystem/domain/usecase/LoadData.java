@@ -48,7 +48,7 @@ public class LoadData extends UseCase<File, Object> {
 
             int purchaseAmount = Customer.Level.getPurchaseAmount(level);
 
-            Throwable t = dataSource.createCustomer(new Customer(-1, name, birth, phoneNum, level, purchaseAmount))
+            Throwable t = dataSource.createCustomer(new Customer(name, birth, phoneNum, level, purchaseAmount))
                     .blockingGet();
 
             if (t != null)
@@ -61,7 +61,7 @@ public class LoadData extends UseCase<File, Object> {
             String name = sc.next();
             Employee.Rank rank = Employee.Rank.parse(sc.next());
 
-            Throwable t = dataSource.createEmployee(new Employee(-1, name,
+            Throwable t = dataSource.createEmployee(new Employee(name,
                     StringUtils.generateFourNumString(), rank)).blockingGet();
 
             if (t != null)
@@ -75,7 +75,7 @@ public class LoadData extends UseCase<File, Object> {
         for (int i = 0; i < count; i++) {
             String name = sc.next();
             int price = sc.nextInt();
-            menus.add(new Menu(-1, name, price));
+            menus.add(new Menu(name, price));
         }
         
         Throwable t = dataSource.createMenus(menus).blockingGet();

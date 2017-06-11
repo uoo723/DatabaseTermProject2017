@@ -11,6 +11,10 @@ public final class Menu {
         this.price = price;
     }
 
+    public Menu(String name, int price) {
+        this(-1, name, price);
+    }
+
     public int getId() {
         return id;
     }

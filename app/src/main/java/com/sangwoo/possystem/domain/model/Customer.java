@@ -19,6 +19,10 @@ public final class Customer {
         this.purchaseAmount = purchaseAmount;
     }
 
+    public Customer(String name, Date birthDate, String phoneNum, Level level, int purchaseAmount) {
+        this(-1, name, birthDate, phoneNum, level, purchaseAmount);
+    }
+
     public int getId() {
         return id;
     }

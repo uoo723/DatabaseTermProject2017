@@ -5,12 +5,22 @@ public final class Employee {
     private String name;
     private String employeeId;
     private Rank rank;
+    private int record;
 
-    public Employee(int id, String name, String employeeId, Rank rank) {
+    public Employee(int id, String name, String employeeId, Rank rank, int record) {
         this.id = id;
         this.name = name;
         this.employeeId = employeeId;
         this.rank = rank;
+        this.record = record;
+    }
+
+    public Employee(int id, String name, String employeeId, Rank rank) {
+        this(id, name, employeeId, rank, 0);
+    }
+
+    public Employee(String name, String employeeId, Rank rank) {
+        this(-1, name, employeeId, rank);
     }
 
     public int getId() {
@@ -43,6 +53,14 @@ public final class Employee {
 
     public void setRank(Rank rank) {
         this.rank = rank;
+    }
+
+    public int getRecord() {
+        return record;
+    }
+
+    public void setRecord(int record) {
+        this.record = record;
     }
 
     public enum Rank {

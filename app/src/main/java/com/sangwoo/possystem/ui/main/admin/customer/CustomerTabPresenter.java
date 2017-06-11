@@ -138,6 +138,6 @@ public class CustomerTabPresenter implements CustomerTabContract.Presenter {
     }
 
     private Customer createCustomer(String name, Date birthDate, String phoneNum, Customer.Level level) {
-        return new Customer(-1, name, birthDate, phoneNum, level, Customer.Level.getPurchaseAmount(level));
+        return new Customer(name, birthDate, phoneNum, level, Customer.Level.getPurchaseAmount(level));
     }
 }
