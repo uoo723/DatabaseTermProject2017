@@ -129,6 +129,11 @@ public class MainView extends BaseFrame implements MainContract.View {
         MenuView menuView = new MenuView();
         AdminView adminView = new AdminView();
 
+        tableView.setParentJFrame(this);
+        orderView.setParentJFrame(this);
+        menuView.setParentJFrame(this);
+        adminView.setParentJFrame(this);
+        
         mainContainer = new JPanel();
         mainContainer.setLayout(new GridBagLayout());
         mainContainer.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
