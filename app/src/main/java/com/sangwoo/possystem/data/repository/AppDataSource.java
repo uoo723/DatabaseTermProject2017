@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class AppDataSource implements DataSource {
     private static final Logger logger = LogManager.getLogger();
@@ -246,32 +247,46 @@ public class AppDataSource implements DataSource {
 
     @Override
     public Single<Sales> getSales(Date date) {
-        Single<List<Menu>> menus = databaseProxy.getDatabase()
-                .select("select menu_id, name, price, count(menu_id) c_menu from PAYMENT p, menu m where " +
-                        "p.menu_id = m.id group by menu_id, m.name, price order by c_menu")
-                .getAs(BigDecimal.class, String.class, BigDecimal.class, BigDecimal.class)
-                .map(tuple -> new Menu(tuple._1().intValue(), tuple._2(), tuple._3().intValue()))
-                .toList();
+        return Single.fromCallable(() -> {
+            List<Menu> menus = databaseProxy.getDatabase()
+                    .select("select m.id, name, price, count(menu_id) c_menu from PAYMENT p right join menu m on " +
+                            "p.menu_id = m.id group by m.id, m.name, price order by c_menu")
+                    .getAs(BigDecimal.class, String.class, BigDecimal.class, BigDecimal.class)
+                    .map(tuple -> new Menu(tuple._1().intValue(), tuple._2(), tuple._3().intValue()))
+                    .toList()
+                    .blockingGet();
 
-        String begin = DateUtils.convertToString(DateUtils.convertBeginOfDay(date));
-        String end = DateUtils.convertToString(DateUtils.convertEndOfDay(date));
+            String begin = DateUtils.convertToString(DateUtils.convertBeginOfDay(date));
+            String end = DateUtils.convertToString(DateUtils.convertEndOfDay(date));
 
-        Single<BigDecimal> todaySales = databaseProxy.getDatabase()
-                .select("select sum(pay) sum from PAYMENT where \"DATE\" BETWEEN to_date(?, " +
-                        "'YY-MM-DD HH24:MI:SS') and to_date(?, 'YY-MM-DD HH24:MI:SS')")
-                .parameters(begin, end)
-                .getAs(BigDecimal.class)
-                .singleOrError();
+            BigDecimal todaySales;
 
-        Single<BigDecimal> accumulatedSales = databaseProxy.getDatabase()
-                .select("select sum(pay) from PAYMENT where \"DATE\" <= to_date(?, " +
-                        "'YY-MM-DD HH24:MI:SS')")
-                .parameters(end)
-                .getAs(BigDecimal.class)
-                .singleOrError();
+            try {
+                todaySales = databaseProxy.getDatabase()
+                        .select("select sum(pay) sum from PAYMENT where \"DATE\" BETWEEN to_date(?, " +
+                                "'YY-MM-DD HH24:MI:SS') and to_date(?, 'YY-MM-DD HH24:MI:SS')")
+                        .parameters(begin, end)
+                        .getAs(BigDecimal.class)
+                        .blockingFirst();
+            } catch (NullPointerException e) {
+                todaySales = new BigDecimal(0);
+            }
 
-        return Single.zip(menus, todaySales, accumulatedSales, (menus1, bigDecimal, bigDecimal2) ->
-                new Sales(date, menus1.get(menus1.size() - 1), menus1.get(0), bigDecimal.intValue(),
-                        bigDecimal2.intValue()));
+            BigDecimal accumulatedSales;
+
+            try {
+                accumulatedSales = databaseProxy.getDatabase()
+                        .select("select sum(pay) from PAYMENT where \"DATE\" <= to_date(?, " +
+                                "'YY-MM-DD HH24:MI:SS')")
+                        .parameters(end)
+                        .getAs(BigDecimal.class)
+                        .blockingFirst();
+            } catch (NullPointerException e) {
+                accumulatedSales = new BigDecimal(0);
+            }
+
+            return new Sales(date, menus.get(menus.size() - 1), menus.get(0), todaySales.intValue(),
+                        accumulatedSales.intValue());
+        });
     }
 }
