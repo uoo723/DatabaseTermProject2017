@@ -51,4 +51,4 @@ dependencies {
     compile group: 'com.github.lgooddatepicker', name: 'LGoodDatePicker', version: '10.2.3'
 }
 
-mainClassName = 'com.sangwoo.possystem.Main'
+mainClassName = 'com.sangwoo.possystem.App'
