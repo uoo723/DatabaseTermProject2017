@@ -71,6 +71,12 @@ public final class Employee {
 
             return rank;
         }
+
+
+        @Override
+        public String toString() {
+            return getValue();
+        }
     }
 
     @Override

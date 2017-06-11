@@ -1,11 +1,17 @@
 package com.sangwoo.possystem.ui.main.admin.menu;
 
+import com.sangwoo.possystem.domain.model.Employee;
 import com.sangwoo.possystem.ui.BasePanel;
+import com.sangwoo.possystem.ui.main.admin.RegisterPrompt;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MenuTab extends BasePanel {
+
+    private static final Logger logger = LogManager.getLogger();
 
     private JLabel menuLabel;
     private JTextField menuTextField;
@@ -54,6 +60,8 @@ public class MenuTab extends BasePanel {
         c.weightx = 1;
         c.weighty = 1;
         add(viewArea, c);
+
+        initButtonListener();
     }
 
     @Override
@@ -63,4 +71,7 @@ public class MenuTab extends BasePanel {
 
     @Override
     public void setTitle(String title) { /* Do nothing */ }
+
+    private void initButtonListener() {
+    }
 }
