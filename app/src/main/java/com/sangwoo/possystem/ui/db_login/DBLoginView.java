@@ -143,8 +143,6 @@ public class DBLoginView extends BaseFrame implements DBLoginContract.View {
         SwingUtils.ceneterWindow(this);
 
         initButtonListener();
-
-        presenter.login("192.168.56.101", "possystem", "possystem");
     }
 
     @Override
