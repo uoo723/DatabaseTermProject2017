@@ -11,10 +11,12 @@ interface CustomerTabContract {
         void failedInquiry(String message);
         void succeedRegistration();
         void failedRegistration(String message);
+        void registerClickedResult(boolean permission);
     }
 
     interface Presenter extends BasePresenter<View> {
         void inquiryCustomer(String name);
         void registerCustomer(String name, String birth, String phoneNum, Customer.Level level);
+        void registerClicked();
     }
 }

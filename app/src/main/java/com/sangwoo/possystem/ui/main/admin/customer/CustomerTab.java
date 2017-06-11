@@ -122,8 +122,17 @@ public class CustomerTab extends BasePanel implements CustomerTabContract.View {
             Toast.makeToast(getParentJFrame(), message);
     }
 
+    @Override
+    public void registerClickedResult(boolean permission) {
+        if (permission) {
+            prompt.showPrompt();
+        } else {
+            Toast.makeToast(getParentJFrame(), "  권한이 없습니다  ");
+        }
+    }
+
     private void initButtonListener() {
-        joinButton.addActionListener(e -> prompt.showPrompt());
+        joinButton.addActionListener(e -> presenter.registerClicked());
         inquiryButton.addActionListener(e -> presenter.inquiryCustomer(customerTextField.getText()));
         prompt.setOnRegisterListener(presenter::registerCustomer);
     }

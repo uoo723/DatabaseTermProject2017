@@ -61,6 +61,20 @@ public class CustomerTabPresenter implements CustomerTabContract.Presenter {
     }
 
     @Override
+    public void registerClicked() {
+        if (!EmployeeLoginSession.isLogin()) {
+            view.requiredEmployeeLogin();
+            return;
+        }
+
+        if (EmployeeLoginSession.getEmployee().getRank() == Employee.Rank.SUPERVISOR) {
+            view.registerClickedResult(true);
+        } else {
+            view.registerClickedResult(false);
+        }
+    }
+
+    @Override
     public void registerCustomer(String name, String birth, String phoneNum, Customer.Level level) {
         if (!EmployeeLoginSession.isLogin()) {
             view.requiredEmployeeLogin();
