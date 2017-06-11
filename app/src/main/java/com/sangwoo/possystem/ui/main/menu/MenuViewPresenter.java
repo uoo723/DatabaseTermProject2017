@@ -22,6 +22,8 @@ public class MenuViewPresenter implements MenuViewContract.Presenter {
 
     @Override
     public void loadMenu() {
+        getMenuListUseCase.dispose();
+        getMenuListUseCase.clear();
         getMenuListUseCase.execute(null, view::succeedLoad,
                 throwable -> view.failedLoad());
     }

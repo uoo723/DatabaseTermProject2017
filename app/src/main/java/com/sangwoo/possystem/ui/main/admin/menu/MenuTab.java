@@ -1,16 +1,26 @@
 package com.sangwoo.possystem.ui.main.admin.menu;
 
+import com.sangwoo.possystem.App;
+import com.sangwoo.possystem.common.widgets.Toast;
+import com.sangwoo.possystem.domain.model.Menu;
 import com.sangwoo.possystem.ui.BasePanel;
 import com.sangwoo.possystem.ui.main.admin.RegisterPrompt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.inject.Inject;
 import javax.swing.*;
 import java.awt.*;
 
-public class MenuTab extends BasePanel {
+public class MenuTab extends BasePanel implements MenuTabContract.View {
+
+    public interface OnMenuAddListener {
+        void refresh();
+    }
 
     private static final Logger logger = LogManager.getLogger();
+
+    private OnMenuAddListener listener;
 
     private JLabel menuLabel;
     private JTextField menuTextField;
@@ -20,8 +30,14 @@ public class MenuTab extends BasePanel {
 
     private RegisterPrompt<String> prompt;
 
+    @Inject
+    MenuTabContract.Presenter presenter;
+
+
     @Override
     public void initView() {
+        presenter.bindView(this);
+
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
@@ -32,6 +48,8 @@ public class MenuTab extends BasePanel {
         registerButton = new JButton("메뉴등록");
         inquiryButton = new JButton("조회");
         viewArea = new JTextArea();
+
+        viewArea.setEditable(false);
 
         c.gridx = 0;
         c.gridy = 0;
@@ -69,11 +87,62 @@ public class MenuTab extends BasePanel {
 
     @Override
     public void inject() {
-
+        DaggerMenuTabComponent.builder()
+                .appComponent(App.getAppComponent())
+                .menuTabPresenterModule(new MenuTabPresenterModule())
+                .build()
+                .inject(this);
     }
 
     @Override
     public void setTitle(String title) { /* Do nothing */ }
+
+    @Override
+    public void requiredEmployeeLoin() {
+        Toast.makeToast(getParentJFrame(), "  직원 로그인을 해주세요  ");
+    }
+
+    @Override
+    public void succeedRegistration() {
+        if (listener != null)
+            listener.refresh();
+
+        Toast.makeToast(getParentJFrame(), "  등록 성공  ");
+        prompt.hidePrompt();
+    }
+
+    @Override
+    public void failedRegistration(String message) {
+        if (message == null)
+            Toast.makeToast(getParentJFrame(), " 등록 실패  ");
+        else
+            Toast.makeToast(getParentJFrame(), message);
+    }
+
+    @Override
+    public void showMenuInfo(final Menu menu) {
+        viewArea.setText(getMenuInfoString(menu));
+    }
+
+    @Override
+    public void failedInquiry(String message) {
+        if (message == null)
+            Toast.makeToast(getParentJFrame(), "  조회 실패  ");
+        else
+            Toast.makeToast(getParentJFrame(), message);
+    }
+
+    @Override
+    public void registerClickedResult(boolean permission) {
+        if (permission)
+            prompt.showPrompt();
+        else
+            Toast.makeToast(getParentJFrame(), "  권한 없음  ");
+    }
+
+    public void setOnMenuAddListener(OnMenuAddListener listener) {
+        this.listener = listener;
+    }
 
     private void initPrompt() {
         JTextField textField = new JTextField();
@@ -83,10 +152,12 @@ public class MenuTab extends BasePanel {
     }
 
     private void initButtonListener() {
-        registerButton.addActionListener(e -> prompt.showPrompt());
-        prompt.setOnRegisterListener((name, value) -> {
-            // TODO: 2017. 6. 11. Impl RegisterPrompt#setOnRegisterListener
-            logger.info("name: " + name + ", value: " + value);
-        });
+        registerButton.addActionListener(e -> presenter.registerClicked());
+        inquiryButton.addActionListener(e -> presenter.inquiry(menuTextField.getText()));
+        prompt.setOnRegisterListener(presenter::register);
+    }
+
+    private String getMenuInfoString(final Menu menu) {
+        return String.format("메뉴명:%s\n가격:%d", menu.getName(), menu.getPrice());
     }
 }

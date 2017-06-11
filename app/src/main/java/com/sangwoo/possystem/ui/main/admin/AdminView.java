@@ -64,6 +64,10 @@ public class AdminView extends BasePanel {
         menuTab.setParentJFrame(parent);
     }
 
+    public MenuTab getMenuTab() {
+        return menuTab;
+    }
+
     private void initContent() {
         tabbedPane = new JTabbedPane();
 

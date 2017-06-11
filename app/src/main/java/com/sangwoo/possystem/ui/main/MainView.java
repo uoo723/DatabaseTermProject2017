@@ -179,5 +179,6 @@ public class MainView extends BaseFrame implements MainContract.View {
 
         menuView.setOnMenuClickListener(orderView::addMenu);
         orderView.setOnTableStateChangedListener(tableView::setOrder);
+        adminView.getMenuTab().setOnMenuAddListener(menuView::refresh);
     }
 }

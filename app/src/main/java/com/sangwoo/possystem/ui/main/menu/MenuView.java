@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -89,6 +90,10 @@ public class MenuView extends BasePanel implements MenuViewContract.View {
         this.listener = listener;
     }
 
+    public void refresh() {
+        presenter.loadMenu();
+    }
+
     private void initContent() {
         menuButtons = new ArrayList<>(20);
         final GridBagConstraints c = new GridBagConstraints();
@@ -113,6 +118,12 @@ public class MenuView extends BasePanel implements MenuViewContract.View {
 
     private void initButtonListener(List<Menu> menuList) {
         int min = Math.max(menuList.size(), menuButtons.size());
+
+        menuButtons.forEach(jButton -> {
+            ActionListener[] listeners = jButton.getActionListeners();
+            for (ActionListener listener : listeners)
+                jButton.removeActionListener(listener);
+        });
 
         IntStream.range(0, min).forEach(i ->
                 menuButtons.get(i).addActionListener(e -> {
