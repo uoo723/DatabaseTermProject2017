@@ -125,10 +125,10 @@ public class MainView extends BaseFrame implements MainContract.View {
     }
 
     private void setMainContainer() {
-        JPanel dummyPanel1 = new TableView();
-        JPanel dummyPanel2 = new OrderView();
-        JPanel dummyPanel3 = new MenuView();
-        JPanel dummyPanel4 = new AdminView();
+        JPanel tableView = new TableView();
+        JPanel orderView = new OrderView();
+        JPanel menuView = new MenuView();
+        JPanel adminView = new AdminView();
 
         mainContainer = new JPanel();
         mainContainer.setLayout(new GridBagLayout());
@@ -151,22 +151,22 @@ public class MainView extends BaseFrame implements MainContract.View {
         c.gridy = 0;
         c.weighty = 0.4;
         c.insets = new Insets(10, 0, 0, 5);
-        mainContainer.add(dummyPanel1, c);
+        mainContainer.add(tableView, c);
 
         c.gridx = 1;
         c.gridy = 0;
         c.insets = new Insets(10, 5, 0, 0);
-        mainContainer.add(dummyPanel2, c);
+        mainContainer.add(orderView, c);
 
         c.gridx = 0;
         c.gridy = 1;
         c.weighty = 0.6;
         c.insets = new Insets(10, 0, 0, 5);
-        mainContainer.add(dummyPanel3, c);
+        mainContainer.add(menuView, c);
 
         c.gridx = 1;
         c.gridy = 1;
         c.insets = new Insets(10, 5, 0, 0);
-        mainContainer.add(dummyPanel4, c);
+        mainContainer.add(adminView, c);
     }
 }
