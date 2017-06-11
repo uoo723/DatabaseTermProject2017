@@ -97,6 +97,19 @@ public final class Customer {
 
             return level;
         }
+
+        public static int getPurchaseAmount(Level level) {
+            switch (level) {
+            case GOLD:
+                return 1000000;
+            case SILVER:
+                return 500000;
+            case BRONZE:
+                return 300000;
+            default:
+                return 0;
+            }
+        }
     }
 
     @Override

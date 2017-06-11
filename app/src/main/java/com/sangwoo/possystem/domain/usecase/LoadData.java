@@ -46,19 +46,7 @@ public class LoadData extends UseCase<File, Object> {
             String phoneNum = sc.next();
             Customer.Level level = Customer.Level.parse(sc.next());
 
-            int purchaseAmount = 0;
-
-            switch (level) {
-            case GOLD:
-                purchaseAmount = 1000000;
-                break;
-            case SILVER:
-                purchaseAmount = 500000;
-                break;
-            case BRONZE:
-                purchaseAmount = 300000;
-                break;
-            }
+            int purchaseAmount = Customer.Level.getPurchaseAmount(level);
 
             Throwable t = dataSource.createCustomer(new Customer(-1, name, birth, phoneNum, level, purchaseAmount))
                     .blockingGet();
