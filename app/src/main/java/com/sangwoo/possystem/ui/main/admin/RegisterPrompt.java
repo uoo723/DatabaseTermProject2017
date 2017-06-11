@@ -31,6 +31,9 @@ public class RegisterPrompt<V> extends JFrame implements Prompt {
         nameTextField.setText("");
         if (valueComponent instanceof JTextField)
             ((JTextField) valueComponent).setText("");
+        else if (valueComponent instanceof JComboBox)
+            ((JComboBox) valueComponent).setSelectedIndex(0);
+
         setVisible(true);
     }
 
@@ -47,7 +50,7 @@ public class RegisterPrompt<V> extends JFrame implements Prompt {
         valueComponent = component;
     }
 
-    public void showPrompt(String title, String nameLabelStr, String valueLabelStr, Class<V> type) {
+    public void initPrompt(String title, String nameLabelStr, String valueLabelStr, Class<V> type) {
         this.type = type;
 
         if (valueComponent == null)
@@ -90,7 +93,6 @@ public class RegisterPrompt<V> extends JFrame implements Prompt {
 
         pack();
         SwingUtils.ceneterWindow(this);
-        showPrompt();
     }
 
     @SuppressWarnings("unchecked")

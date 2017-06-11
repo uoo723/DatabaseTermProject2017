@@ -1,6 +1,7 @@
 package com.sangwoo.possystem.ui.main.admin.menu;
 
 import com.sangwoo.possystem.ui.BasePanel;
+import com.sangwoo.possystem.ui.main.admin.RegisterPrompt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,10 +18,14 @@ public class MenuTab extends BasePanel {
     private JButton inquiryButton;
     private JTextArea viewArea;
 
+    private RegisterPrompt<String> prompt;
+
     @Override
     public void initView() {
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
+
+        initPrompt();
 
         menuLabel = new JLabel("메뉴명");
         menuTextField = new JTextField();
@@ -70,6 +75,18 @@ public class MenuTab extends BasePanel {
     @Override
     public void setTitle(String title) { /* Do nothing */ }
 
+    private void initPrompt() {
+        JTextField textField = new JTextField();
+        prompt = new RegisterPrompt<>();
+        prompt.setValueComponent(textField);
+        prompt.initPrompt("메뉴등록", "메뉴명", "가격", String.class);
+    }
+
     private void initButtonListener() {
+        registerButton.addActionListener(e -> prompt.showPrompt());
+        prompt.setOnRegisterListener((name, value) -> {
+            // TODO: 2017. 6. 11. Impl RegisterPrompt#setOnRegisterListener
+            logger.info("name: " + name + ", value: " + value);
+        });
     }
 }

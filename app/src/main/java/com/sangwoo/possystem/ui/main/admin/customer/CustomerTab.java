@@ -1,11 +1,15 @@
 package com.sangwoo.possystem.ui.main.admin.customer;
 
 import com.sangwoo.possystem.ui.BasePanel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class CustomerTab extends BasePanel {
+
+    private static final Logger logger = LogManager.getLogger();
 
     private JLabel customerLabel;
     private JTextField customerTextField;
@@ -13,12 +17,15 @@ public class CustomerTab extends BasePanel {
     private JButton inquiryButton;
     private JScrollPane scrollPane;
     private JTextArea viewArea;
+    private CustomerRegisterPrompt prompt;
 
     @Override
     public void initView() {
 
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
+
+        prompt = new CustomerRegisterPrompt();
 
         customerLabel = new JLabel("고객명");
         customerTextField = new JTextField();
@@ -58,6 +65,8 @@ public class CustomerTab extends BasePanel {
         c.weighty = 1;
         c.fill = GridBagConstraints.BOTH;
         add(scrollPane, c);
+
+        initButtonListener();
     }
 
     @Override
@@ -67,4 +76,12 @@ public class CustomerTab extends BasePanel {
 
     @Override
     public void setTitle(String title) { /* Do nothing */ }
+
+    private void initButtonListener() {
+        joinButton.addActionListener(e -> prompt.showPrompt());
+        prompt.setOnRegisterListener((name, birth, phoneNum) -> {
+            // TODO: 2017. 6. 11. Impl CustomerRegisterPrompt#setOnRegisterListener
+            logger.info("name: " + name + ", birth: " + birth + ", phone: " + phoneNum);
+        });
+    }
 }
