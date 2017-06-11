@@ -1,8 +1,6 @@
 package com.sangwoo.possystem.ui.main.admin.menu;
 
-import com.sangwoo.possystem.domain.model.Employee;
 import com.sangwoo.possystem.ui.BasePanel;
-import com.sangwoo.possystem.ui.main.admin.RegisterPrompt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

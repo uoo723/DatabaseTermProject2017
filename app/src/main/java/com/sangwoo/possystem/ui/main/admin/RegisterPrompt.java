@@ -2,11 +2,12 @@ package com.sangwoo.possystem.ui.main.admin;
 
 import com.sangwoo.possystem.common.exceptions.RuntimeSqlException;
 import com.sangwoo.possystem.common.utils.SwingUtils;
+import com.sangwoo.possystem.ui.Prompt;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class RegisterPrompt<V> extends JFrame {
+public class RegisterPrompt<V> extends JFrame implements Prompt {
 
     public interface OnRegisterListener<V> {
         void onRegister(String name, V value);
@@ -25,6 +26,19 @@ public class RegisterPrompt<V> extends JFrame {
 
     private Class<V> type;
 
+    @Override
+    public void showPrompt() {
+        nameTextField.setText("");
+        if (valueComponent instanceof JTextField)
+            ((JTextField) valueComponent).setText("");
+        setVisible(true);
+    }
+
+    @Override
+    public void hidePrompt() {
+        dispose();
+    }
+
     public void setOnRegisterListener(OnRegisterListener<V> listener) {
         this.listener = listener;
     }
@@ -33,7 +47,7 @@ public class RegisterPrompt<V> extends JFrame {
         valueComponent = component;
     }
 
-    public void show(String title, String nameLabelStr, String valueLabelStr, Class<V> type) {
+    public void showPrompt(String title, String nameLabelStr, String valueLabelStr, Class<V> type) {
         this.type = type;
 
         if (valueComponent == null)
@@ -76,7 +90,7 @@ public class RegisterPrompt<V> extends JFrame {
 
         pack();
         SwingUtils.ceneterWindow(this);
-        setVisible(true);
+        showPrompt();
     }
 
     @SuppressWarnings("unchecked")
@@ -106,6 +120,6 @@ public class RegisterPrompt<V> extends JFrame {
             }
         });
 
-        cancelButton.addActionListener(e -> dispose());
+        cancelButton.addActionListener(e -> hidePrompt());
     }
 }

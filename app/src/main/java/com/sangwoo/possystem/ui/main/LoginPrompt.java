@@ -1,11 +1,12 @@
 package com.sangwoo.possystem.ui.main;
 
 import com.sangwoo.possystem.common.utils.SwingUtils;
+import com.sangwoo.possystem.ui.Prompt;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class LoginPrompt extends JFrame {
+public class LoginPrompt extends JFrame implements Prompt {
     private OnLoginListener listener;
 
     private JLabel nameLabel;
@@ -24,6 +25,18 @@ public class LoginPrompt extends JFrame {
         super();
 
         initView();
+    }
+
+    @Override
+    public void showPrompt() {
+        nameInput.setText("");
+        idInput.setText("");
+        setVisible(true);
+    }
+
+    @Override
+    public void hidePrompt() {
+        dispose();
     }
 
     public void setOnLoginListener(OnLoginListener listener) {
@@ -110,10 +123,10 @@ public class LoginPrompt extends JFrame {
             }
         });
 
+        initButtonListener();
+
         pack();
         SwingUtils.ceneterWindow(this);
-
-        initButtonListener();
     }
 
     private void initButtonListener() {

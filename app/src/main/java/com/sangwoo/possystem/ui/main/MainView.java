@@ -79,7 +79,7 @@ public class MainView extends BaseFrame implements MainContract.View {
     @Override
     public void succeedEmployeeLogin() {
         Toast.makeToast(this, "  로그인 성공  ");
-        loginPrompt.dispose();
+        loginPrompt.hidePrompt();
     }
 
     @Override
@@ -106,7 +106,7 @@ public class MainView extends BaseFrame implements MainContract.View {
     }
 
     private void openLoginPrompt() {
-        loginPrompt.setVisible(true);
+        loginPrompt.showPrompt();
         loginPrompt.setOnLoginListener(presenter::employeeLogin);
     }
 
