@@ -2,8 +2,8 @@ package com.sangwoo.possystem.ui.main.admin.employee;
 
 import com.sangwoo.possystem.common.utils.StringUtils;
 import com.sangwoo.possystem.domain.model.Employee;
+import com.sangwoo.possystem.domain.usecase.CreateEmployee;
 import com.sangwoo.possystem.domain.usecase.InquiryEmployee;
-import com.sangwoo.possystem.domain.usecase.RegisterEmployee;
 import com.sangwoo.possystem.ui.EmployeeLoginSession;
 
 import javax.inject.Inject;
@@ -14,12 +14,12 @@ public class EmployeeTabPresenter implements EmployeeTabContract.Presenter {
     private EmployeeTabContract.View view;
 
     private final InquiryEmployee inquiryEmployeeUseCase;
-    private final RegisterEmployee registerEmployeeUseCase;
+    private final CreateEmployee createEmployeeUseCase;
 
     @Inject
-    EmployeeTabPresenter(InquiryEmployee inquiryEmployeeUseCase, RegisterEmployee registerEmployeeUseCase) {
+    EmployeeTabPresenter(InquiryEmployee inquiryEmployeeUseCase, CreateEmployee createEmployeeUseCase) {
         this.inquiryEmployeeUseCase = inquiryEmployeeUseCase;
-        this.registerEmployeeUseCase = registerEmployeeUseCase;
+        this.createEmployeeUseCase = createEmployeeUseCase;
     }
 
     @Override
@@ -74,9 +74,9 @@ public class EmployeeTabPresenter implements EmployeeTabContract.Presenter {
         final String employeeId = StringUtils.generateFourNumString();
         Employee employee = new Employee(name.trim(), employeeId, rank);
 
-        registerEmployeeUseCase.dispose();
-        registerEmployeeUseCase.clear();
-        registerEmployeeUseCase.execute(employee, o -> {},
+        createEmployeeUseCase.dispose();
+        createEmployeeUseCase.clear();
+        createEmployeeUseCase.execute(employee, o -> {},
                 throwable -> {
                     if (throwable instanceof BatchUpdateException) {
                         BatchUpdateException exception = (BatchUpdateException) throwable;
