@@ -21,7 +21,7 @@ import java.io.File;
 public class MainView extends BaseFrame implements MainContract.View {
 
     private static final Logger logger = LogManager.getLogger();
-    private static final int WIDTH = 500;
+    private static final int WIDTH = 560;
     private static final int HEIGHT = 700;
 
     @Inject
