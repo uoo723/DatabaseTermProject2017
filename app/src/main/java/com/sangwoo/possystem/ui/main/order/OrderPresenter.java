@@ -13,7 +13,6 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class OrderPresenter implements OrderContract.Presenter {
 
@@ -176,6 +175,7 @@ public class OrderPresenter implements OrderContract.Presenter {
                 },
                 () -> {
                     order.getMenus().clear();
+                    order.getTable().setOrdering(false);
                     view.succeedPay(order.getTable().getTableNum());
                 });
     }
