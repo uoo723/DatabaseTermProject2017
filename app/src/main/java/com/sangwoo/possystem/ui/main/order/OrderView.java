@@ -33,6 +33,7 @@ public class OrderView extends BasePanel implements OrderContract.View {
     private JButton orderButton;
     private JButton cancelBUtton;
     private JButton payButton;
+    private JScrollPane scrollPane;
 
     private final static String[] TABLE_NUMS = new String[20];
 
@@ -117,7 +118,8 @@ public class OrderView extends BasePanel implements OrderContract.View {
     private void initContent() {
         orderTextArea = new JTextArea();
         orderTextArea.setEditable(false);
-//        orderTextArea.setPreferredSize(new Dimension(30, 30));
+
+        scrollPane = new JScrollPane(orderTextArea);
 
         customerLabel = new JLabel("고객명");
         tableLabel = new JLabel("테이블명");
@@ -135,7 +137,7 @@ public class OrderView extends BasePanel implements OrderContract.View {
         c.weighty = 1;
         c.gridheight = 7;
         c.fill = GridBagConstraints.BOTH;
-        contentPanel.add(orderTextArea, c);
+        contentPanel.add(scrollPane, c);
 
         c.gridx = 1;
         c.gridy = 0;

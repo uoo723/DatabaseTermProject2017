@@ -134,11 +134,16 @@ public class MainView extends BaseFrame implements MainContract.View {
         menuView.setParentJFrame(this);
         adminView.setParentJFrame(this);
 
+        tableView.setPreferredSize(new Dimension(WIDTH / 3, 0));
+        orderView.setPreferredSize(new Dimension(WIDTH / 3, 0));
+        menuView.setPreferredSize(new Dimension(WIDTH / 3, 0));
+        adminView.setPreferredSize(new Dimension(WIDTH / 3, 0));
+
         mainContainer = new JPanel();
         mainContainer.setLayout(new GridBagLayout());
         mainContainer.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         GridBagConstraints c = new GridBagConstraints();
-        c.weightx = 1;
+        c.weightx = .5;
         c.fill = GridBagConstraints.BOTH;
 
         titleLabel = new JLabel("식당 주문관리", SwingConstants.CENTER);
@@ -152,8 +157,8 @@ public class MainView extends BaseFrame implements MainContract.View {
 
         c.gridx = 0;
         c.gridy = 0;
-        c.weighty = 0.01;
         c.insets = new Insets(10, 0, 0, 5);
+        c.weighty = .4;
         mainContainer.add(tableView, c);
 
         c.gridx = 1;
@@ -163,8 +168,8 @@ public class MainView extends BaseFrame implements MainContract.View {
 
         c.gridx = 0;
         c.gridy = 1;
-        c.weighty = 0.99;
         c.insets = new Insets(10, 0, 0, 5);
+        c.weighty = .6;
         mainContainer.add(menuView, c);
 
         c.gridx = 1;
