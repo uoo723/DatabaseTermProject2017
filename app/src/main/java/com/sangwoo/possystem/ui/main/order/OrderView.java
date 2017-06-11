@@ -7,6 +7,12 @@ import java.awt.*;
 
 public class OrderView extends BasePanel {
 
+    public interface OnTableStateChangedListener {
+        void onChanged(int tableNum, boolean order);
+    }
+
+    private OnTableStateChangedListener onTableStateChangedListener;
+
     private JLabel titleLabel;
     private JPanel contentPanel;
 
@@ -31,5 +37,9 @@ public class OrderView extends BasePanel {
     @Override
     public void setTitle(String title) {
 
+    }
+
+    public void setOnTableStateChangedListener(OnTableStateChangedListener listener) {
+        onTableStateChangedListener = listener;
     }
 }

@@ -1,5 +1,6 @@
 package com.sangwoo.possystem.ui.main;
 
+import com.sangwoo.possystem.domain.usecase.GetTables;
 import com.sangwoo.possystem.domain.usecase.InquiryEmployee;
 import com.sangwoo.possystem.domain.usecase.LoadData;
 import com.sangwoo.possystem.ui.EmployeeLoginSession;
@@ -9,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import javax.inject.Inject;
 import java.io.File;
 
+// TODO: 2017. 6. 11. Impl init table state
 public class MainPresenter implements MainContract.Presenter {
     private static final Logger logger = LogManager.getLogger();
 
@@ -16,11 +18,13 @@ public class MainPresenter implements MainContract.Presenter {
 
     private final InquiryEmployee inquiryEmployeeUseCase;
     private final LoadData loadDataUseCase;
+    private final GetTables getTablesUseCase;
 
     @Inject
-    MainPresenter(InquiryEmployee inquiryEmployee, LoadData loadData) {
+    MainPresenter(InquiryEmployee inquiryEmployee, LoadData loadData, GetTables getTables) {
         inquiryEmployeeUseCase = inquiryEmployee;
         loadDataUseCase = loadData;
+        getTablesUseCase = getTables;
     }
 
     @Override

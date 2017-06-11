@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 import javax.inject.Inject;
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.File;
 
@@ -125,10 +124,10 @@ public class MainView extends BaseFrame implements MainContract.View {
     }
 
     private void setMainContainer() {
-        JPanel tableView = new TableView();
-        JPanel orderView = new OrderView();
-        JPanel menuView = new MenuView();
-        JPanel adminView = new AdminView();
+        TableView tableView = new TableView();
+        OrderView orderView = new OrderView();
+        MenuView menuView = new MenuView();
+        AdminView adminView = new AdminView();
 
         mainContainer = new JPanel();
         mainContainer.setLayout(new GridBagLayout());
@@ -146,7 +145,7 @@ public class MainView extends BaseFrame implements MainContract.View {
 
         add(titleLabel, BorderLayout.NORTH);
         add(mainContainer, BorderLayout.CENTER);
-        
+
         c.gridx = 0;
         c.gridy = 0;
         c.weighty = 0.4;
