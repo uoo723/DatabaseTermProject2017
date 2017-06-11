@@ -2,6 +2,7 @@ package com.sangwoo.possystem.ui.main.order;
 
 import com.sangwoo.possystem.App;
 import com.sangwoo.possystem.common.widgets.Toast;
+import com.sangwoo.possystem.domain.model.Menu;
 import com.sangwoo.possystem.ui.BasePanel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -113,6 +114,16 @@ public class OrderView extends BasePanel implements OrderContract.View {
 
     public void setOnTableStateChangedListener(OnTableStateChangedListener listener) {
         onTableStateChangedListener = listener;
+    }
+
+    @Override
+    public void showMenuList(String menuList) {
+        orderTextArea.setText(menuList);
+    }
+
+    public void addMenu(Menu menu) {
+        logger.info("menu: " + menu);
+        presenter.addMenu(menu);
     }
 
     private void initContent() {

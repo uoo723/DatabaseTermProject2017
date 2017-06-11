@@ -39,4 +39,14 @@ public final class Menu {
     public String toString() {
         return "id: " + id + ", name: " + name + ", price: " + price;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Menu))
+            return false;
+
+        Menu other = (Menu) obj;
+
+        return this.id == other.id && this.name.equals(other.name) && this.price == other.price;
+    }
 }

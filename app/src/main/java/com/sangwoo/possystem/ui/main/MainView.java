@@ -20,7 +20,7 @@ import java.io.File;
 public class MainView extends BaseFrame implements MainContract.View {
 
     private static final Logger logger = LogManager.getLogger();
-    private static final int WIDTH = 560;
+    private static final int WIDTH = 600;
     private static final int HEIGHT = 700;
 
     @Inject
@@ -176,5 +176,7 @@ public class MainView extends BaseFrame implements MainContract.View {
         c.gridy = 1;
         c.insets = new Insets(10, 5, 0, 0);
         mainContainer.add(adminView, c);
+
+        menuView.setOnMenuClickListener(orderView::addMenu);
     }
 }
