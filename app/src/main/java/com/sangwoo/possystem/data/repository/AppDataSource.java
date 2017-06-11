@@ -150,12 +150,33 @@ public class AppDataSource implements DataSource {
         List<Completable> completables = new ArrayList<>(payment.getOrder().getMenus().size());
         List<Menu> menus = payment.getOrder().getMenus();
 
+        String sql;
+
+        if (payment.getPayer() != null) {
+            sql = "insert into payment(menu_id, table_id, payer_id, employee_id, pay) values(?, ?, ?, ?, ?)";
+        } else {
+            sql = "insert into payment(menu_id, table_id, employee_id, pay) values(?, ?, ?, ?)";
+        }
+
         for (int i = 0; i < menus.size(); i++) {
-            Completable completable = databaseProxy.getDatabase()
-                    .update("insert into payment(menu_id, table_id, payer_id, employee_id, pay) values(?, ?, ?, ?, ?)")
-                    .parameters(menus.get(i).getId(), payment.getOrder().getTable().getId(), payment.getPayer().getId(),
-                            payment.getEmployee().getId(), payment.getPays().get(i))
-                    .complete();
+            Completable completable;
+
+            if (payment.getPayer() != null) {
+                completable = databaseProxy.getDatabase()
+                        .update("insert into payment(menu_id, table_id, payer_id, employee_id, pay) values(?, ?, ?, " +
+                                "?, ?)")
+                        .parameters(menus.get(i).getId(), payment.getOrder().getTable().getId(),
+                                payment.getPayer().getId(),
+                                payment.getEmployee().getId(), payment.getPays().get(i))
+                        .complete();
+            } else {
+                completable = databaseProxy.getDatabase()
+                        .update("insert into payment(menu_id, table_id, payer_id, employee_id, pay) values(?, ?, ?, ?)")
+                        .parameters(menus.get(i).getId(), payment.getOrder().getTable().getId(),
+                                payment.getEmployee().getId(), payment.getPays().get(i))
+                        .complete();
+            }
+
             completables.add(completable);
         }
 

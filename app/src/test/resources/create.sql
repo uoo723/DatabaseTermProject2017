@@ -70,7 +70,7 @@ DECLARE
                              '"DATE" date default sysdate not null,' ||
                              'menu_id int not null,' ||
                              'table_id int not null,' ||
-                             'payer_id int not null,' ||
+                             'payer_id int,' ||
                              'employee_id int not null,' ||
                              'pay int not null,' ||
                              'constraint payment_menu_fk foreign key (menu_id) references menu (id),' ||

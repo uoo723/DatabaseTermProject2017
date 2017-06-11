@@ -53,16 +53,18 @@ public final class Payment {
 
         float discount = 0f;
 
-        switch (payer.getLevel()) {
-        case GOLD:
-            discount = .3f;
-            break;
-        case SILVER:
-            discount = .2f;
-            break;
-        case BRONZE:
-            discount = .1f;
-            break;
+        if (payer != null) {
+            switch (payer.getLevel()) {
+            case GOLD:
+                discount = .3f;
+                break;
+            case SILVER:
+                discount = .2f;
+                break;
+            case BRONZE:
+                discount = .1f;
+                break;
+            }
         }
 
         for (Menu menu : order.getMenus()) {
