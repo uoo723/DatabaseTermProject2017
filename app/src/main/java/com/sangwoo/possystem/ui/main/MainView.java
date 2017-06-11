@@ -39,6 +39,11 @@ public class MainView extends BaseFrame implements MainContract.View {
 
     private LoginPrompt loginPrompt;
 
+    private TableView tableView;
+    private OrderView orderView;
+    private MenuView menuView;
+    private AdminView adminView;
+
     @Override
     public void inject() {
         DaggerMainComponent.builder()
@@ -69,6 +74,7 @@ public class MainView extends BaseFrame implements MainContract.View {
     @Override
     public void succeedLoadingData() {
         Toast.makeToast(this, "  데이터 불러오기 성공  ");
+        menuView.refresh();
     }
 
     @Override
@@ -124,10 +130,10 @@ public class MainView extends BaseFrame implements MainContract.View {
     }
 
     private void setMainContainer() {
-        TableView tableView = new TableView();
-        OrderView orderView = new OrderView();
-        MenuView menuView = new MenuView();
-        AdminView adminView = new AdminView();
+        tableView = new TableView();
+        orderView = new OrderView();
+        menuView = new MenuView();
+        adminView = new AdminView();
 
         tableView.setParentJFrame(this);
         orderView.setParentJFrame(this);
