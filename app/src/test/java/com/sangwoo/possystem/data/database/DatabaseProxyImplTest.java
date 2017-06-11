@@ -12,14 +12,14 @@ public class DatabaseProxyImplTest {
 
     private DatabaseProxy database;
 
-    @Test
+//    @Test
     public void dbInit() throws Exception {
         login();
         Throwable throwable = database.dbInit().blockingGet();
         assertNull(throwable);
     }
 
-    @Test
+//    @Test
     public void failedLogin() throws Exception {
         String user = "dfdf";
         String password = "dfdf";
