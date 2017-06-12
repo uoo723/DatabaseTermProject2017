@@ -107,3 +107,38 @@ BEGIN
     RAISE;
   END IF;
 END;
+/
+
+insert into employee(name, employee_id, rank) values ('한상우', '0000', 'Supervisor');
+insert into employee(name, employee_id, rank) values ('스태프1', '0001', 'Staff');
+insert into employee(name, employee_id, rank) values ('스태프2', '0002', 'Staff');
+
+insert into customer(name, birth_date, phone_num, "LEVEL", purchase_amount) values ('골드', '0101', '1234', 'Gold', 1000000);
+insert into customer(name, birth_date, phone_num, "LEVEL", purchase_amount) values ('실버', '0201', '5678', 'Silver', 500000);
+insert into customer(name, birth_date, phone_num, "LEVEL", purchase_amount) values ('브론즈', '0301', '9123', 'Bronze', 300000);
+insert into customer(name, birth_date, phone_num, "LEVEL", purchase_amount) values ('노멀', '0401', '4567', 'Normal', 0);
+
+insert into menu(name, price) values ('갈릭립아이', 38900);
+insert into menu(name, price) values ('치킨텐더샐러드', 19900);
+insert into menu(name, price) values ('투움바파스타', 20900);
+
+commit;
+/
+
+DECLARE
+  m_id menu.id%TYPE;
+  p_id customer.id%TYPE;
+  e_id employee.id%TYPE;
+BEGIN
+ select id into m_id from menu where name='갈릭립아이';
+ select id into e_id from employee where name='한상우';
+ select id into p_id from customer where name='골드';
+ insert into payment("DATE", menu_id, table_id, payer_id, employee_id, pay) values (to_date('2017-06-11', 'YYYY-MM-DD'), m_id, 1, p_id, e_id, 27230);
+ insert into payment("DATE", menu_id, table_id, payer_id, employee_id, pay) values (to_date('2017-06-12', 'YYYY-MM-DD'), m_id, 1, p_id, e_id, 27230);
+ commit;
+
+ select id into m_id from menu where name='투움바파스타';
+ insert into payment("DATE", menu_id, table_id, payer_id, employee_id, pay) values (to_date('2017-06-12', 'YYYY-MM-DD'), m_id, 1, p_id, e_id, 14630);
+ commit;
+END;
+/
