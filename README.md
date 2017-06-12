@@ -27,12 +27,19 @@ Network connection
 
 ## 프로그램 설명
 
-* Database 로그인  
-<img src="screenshots/DBLoginView.png?raw=true" width="50%">
+* **Database 로그인**  
+<img src="screenshots/DBLoginView.png?raw=true" width="50%">  
 Oracle Database에 접속하기 위한 계정정보를 입력한다  
 
-* Main View  
-<img src="screenshots/MainView.png?raw=true" width="50%">
+* **Main View**  
+<img src="screenshots/MainView.png?raw=true" width="50%">  
+
+* **데이터 로드**  
+<img src="screenshots/LoadData.png?raw=true" width="50%">  
+데이터 파일로부터 데이터베이스 정보를 업데이트한다  
+
+* **기타**  
+ 이하 설명은 screenshots/의 스크린샷 참조
 
 ## License
 
