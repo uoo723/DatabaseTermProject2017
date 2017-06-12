@@ -22,13 +22,17 @@ Network connection
 > gradlew.bat run
 ```
 
-첫 실행시 의존성 라이브러리 및 파일 다운로드로 시간이 다소 걸림
+첫 실행시 의존성 라이브러리 및 파일 다운로드로 시간이 다소 걸림  
+기본적으로 프로그램 최초 실행시 자동으로 테이블을 생성하기 때문에 수동으로 스크립트를 실행하지 않아도 됨  
 
 ## 프로그램 설명
 
 * Database 로그인  
 <img src="screenshots/DBLoginView.png?raw=true" width="50%">
+Oracle Database에 접속하기 위한 계정정보를 입력한다  
 
+* Main View  
+<img src="screenshots/MainView.png?raw=true" width="50%">
 
 ## License
 
