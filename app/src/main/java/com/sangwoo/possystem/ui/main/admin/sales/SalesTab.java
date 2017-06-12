@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class SalesTab extends BasePanel implements SalesTabContract.View {
 
@@ -100,7 +101,10 @@ public class SalesTab extends BasePanel implements SalesTabContract.View {
 
     private void initButtonListener() {
         datePicker.addDateChangeListener(event -> {
-            Date date = java.sql.Date.valueOf(event.getNewDate());
+            LocalDate localDate = event.getNewDate();
+            if (localDate == null)
+                return;
+            Date date = java.sql.Date.valueOf(localDate);
             logger.info("date: " + date);
             presenter.inquiry(date);
         });
